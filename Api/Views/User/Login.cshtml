@@ -1,32 +1,48 @@
 @model Api.Models.ViewModels.LoginVm
-<br />
-<br />
+
+
+<div class="container d-flex  mb-4 justify-content-center ">
+    <div class="d-flex  justify-content-around w-100 align-items-center">
+    <div class="Con1 ">
+        <p class="text-center fs-4 fw-bolder">АГЕНТИИ ОМОРИ НАЗДИ ПРЕЗИДЕНТИ <br> ҶУМУРИИҲУРИИ ТОҶИКИСТОН</p>
+    </div>
+
+    <div class=" d-flex justify-content-center">
+        <img class="card-img-top " src="images/481px-Emblem_of_Tajikistan.svg.png" alt="Card image cap" width="150" height="150">
+    </div>
+
+        <div class="Con3 ">
+            <p class="text-center fs-4 fw-bolder">АГЕНСТВО ПО СТАТИСТИКЕ ПРИ ПРЕЗИДЕНТЕ <br> РЕСПУБЛИКИ ТАДЖКИСТАН</p>
+        </div>
+        </div>
+</div>
 <div id="wrapper" class="wrap-login" style="text-align: -webkit-center;">
     <div class="card col-md-5">
-        <div class="card-body">
+        <div class="card-body btn btn-secondary btn-block">
             <div class="card-content p-2">
-                <div class="text-center">
-                    <img src=""/>
-                </div>
-                <div class="card-title text-uppercase text-center py-3 text-black">Вход</div>
+               
+                <div class="card-title text-uppercase text-center py-6  text-warning fs-4">ВоридшавӢ</div>
+                <hr/>
                 <form asp-action="Login" asp-controller="User" asp-antifor03
                       gery="true" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group mb-2" >
                         <span asp-validation-for="@Model.UserName" class="text-danger"></span>
-                        <div class="position-relative has-icon-right" >
-                            <input type="text" asp-for="UserName" class="form-control input-shadow" autocomplete="username" placeholder="Введите логин" required/>                            
+                        <div class="position-relaive has-icon-right" >
+                            <input type="text" asp-for="UserName" class="form-control input-shadow" autocomplete="username" placeholder="Номи истифодабаранда" required/>                            
                         </div>
                     </div>
                     <div class="form-group">
                         <span asp-validation-for="@Model.Password" class="text-danger"></span>
                         <div class="position-relative has-icon-right">
-                            <input required type="password" asp-for="Password" class="form-control input-shadow" autocomplete="current-password" placeholder="Введите пароль"/>                            
+                            <input required type="password" asp-for="Password" class="form-control input-shadow" autocomplete="current-password" placeholder="Рамз"/>                            
                         </div>
                     </div>
                     <br/>
                     <br/>
-                    <button class="btn btn-warning btn-block" id="submit-btn">Вход</button><a style="color:darkturquoise" asp-action="Register" asp-controller="User">Регистрация</a>
+                    <button class="btn btn-warning btn-block" id="submit-btn">Даромад</button>
+                 @*<button class="btn btn-warning btn-block"><a style="color:darkturquoise" asp-action="Register" asp-controller="User">Регистрация</a></button> *@
+                    
                 </form>
             </div>
         </div>

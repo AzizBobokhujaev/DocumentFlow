@@ -1,1 +1,6 @@
 DocumentFlow.sln.DotSettings.user
+.vs
+.vscode
+/obj
+/bin
+.idea

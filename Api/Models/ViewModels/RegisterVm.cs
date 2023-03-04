@@ -5,24 +5,24 @@ namespace Api.Models.ViewModels;
 public class RegisterVm
 {
     [Required] 
-    [Display(Name = "Логин")] 
+    [Display(Name = "Номи истифодабаранда")] 
     public string UserName { get; set; } = string.Empty;
     public string UserRole { get; set; } = string.Empty;
 
     [Required]
     [EmailAddress]
-    [Display(Name = "Почтаи электроин")]
+    [Display(Name = "Почтаи электронӣ")]
     public string Email { get; set; } = string.Empty;
 
     [Required]
-    [Display(Name = "Номер телефона")]
+    [Display(Name = "Рақами телефон")]
     public string PhoneNumber { get; set; } = string.Empty;
 
     [Required] 
-    [Display(Name = "Пароль")] 
+    [Display(Name = "Рамз")] 
     public string Password { get; set; } = string.Empty;
     
-    [Display(Name = "Подтверждение пароля")]
-    [Compare("Password", ErrorMessage = "Пароли не совпадают")]
+    [Display(Name = "Тасдиқи рамз")]
+    [Compare("Password", ErrorMessage = "Мутобиқати рамз")]
     public string ConfirmPassword { get; set; } = string.Empty;
 }

@@ -1,51 +1,46 @@
 @model Api.Models.ViewModels.RegisterVm
 
-<br />
-<div class="row">
-    <div class="col-md-8" >
-        <div class="card bg-dark" style="border:1px solid white; border-radius:5px;">
+
+<div class="row d-flex justify-content-center">
+    <div class="col-md-8 w-50" >
+        <div class="card bg-secondary" style="border:1px solid white; border-radius:5px;">
             <div class="card-header">
-                <span class="card-title text-white">
-                    Регистрация
+                <span class="card-title text-warning fs-4 ">
+                    Бақайдгирӣ
                 </span>
             </div>
-            <div class="card-body">
+            <div class="card-body ">
                 <form action="Register" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group row">
                         <label asp-for="UserName" class="col-md-4 text-warning"></label>
-                        <input asp-for="UserName" class="col-md-4 form-control"  placeholder="User Name" style="border: 1px solid black;"/>
+                        <input asp-for="UserName" class="col-md-4 form-control"  placeholder="Номи истифодабаранда" style="border: 1px solid black;"/>
                         <span asp-validation-for="UserName" />
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row mt-3">
                         <label asp-for="Email" class="col-md-4 text-warning"></label>
                         <input asp-for="Email" class="col-md-4 form-control" placeholder="user@example.com" style="border: 1px solid black;"/>
                         <span asp-validation-for="Email" />
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row d-flex mt-3">
+                        <label asp-for="PhoneNumber" class="col-md-4 text-warning"></label>
                         
-                            <label asp-for="PhoneNumber" class="col-md-4 text-warning"></label>
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">+992</span>
-                            </div>
-                            <input asp-for="PhoneNumber" class="col-md-3 form-control" type="number" placeholder="987654321" style="border: 1px solid black;"/>
+                            <input asp-for="PhoneNumber" class="col-md-3 form-control" type="number" placeholder="+992987654321" style="border: 1px solid black;"/>
                             <span asp-validation-for="PhoneNumber" />
-                        
-                        
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row mt-3">
                         <label asp-for="Password" class="col-md-4 text-warning"></label>
-                        <input type="password" asp-for="Password" class="col-md-4 form-control" style="border: 1px solid black;"/>
+                        <input type="password" asp-for="Password" class="col-md-4 form-control" placeholder="Накам аз 6 рамз" style="border: 1px solid black;"/>
                         <span asp-validation-for="Password" />
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row mt-3">
                         <label asp-for="ConfirmPassword" class="col-md-4 text-warning"></label>
-                        <input type="password" asp-for="ConfirmPassword" class="col-md-4 form-control" style="border: 1px solid black;"/>
+                        <input type="password" asp-for="ConfirmPassword" class="col-md-4 form-control" placeholder="* * * * * *" style="border: 1px solid black;"/>
                         <span asp-validation-for="ConfirmPassword" />
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row mt-5">
                         <div class="col-md">
-                            <input style="float:right" type="submit" value="Регистрация" class="btn btn-success" />
+                            <input style="float:right" type="submit" value="Сабт" class="btn btn-success text-white" />
                         </div>
                     </div>
                 </form>
