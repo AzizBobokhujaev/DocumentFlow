@@ -1,4 +1,5 @@
 using Api.DbContext;
+using Api.FileRootService;
 using Api.Models.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -49,6 +50,7 @@ public class Startup
                 option.SlidingExpiration = true;
             });
 
+            services.AddScoped<IFileService, FileService>();
             services.AddControllersWithViews();
         }
 

@@ -1,0 +1,54 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<Api.Models.Entities.Order>
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Document Number</th>
+        <th>Title</th>
+        <th>Decree File</th>
+        <th>Execution File</th>
+        <th>Created At</th>
+        <th>Status</th>
+        <th>Deadline</th>
+        <th>Users</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var order in Model)
+    {
+        <tr>
+            <td>@order.DocumentNumber</td>
+            <td>@order.Title</td>
+            <td>
+                @if (!string.IsNullOrEmpty(order.DecreeFilePath))
+                {
+                    <a href="@Url.Content(order.DecreeFilePath)" target="_blank">Download</a>
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
+                {
+                    <a href="@Url.Content(order.ExecutionFilePath)" target="_blank">Download</a>
+                }
+            </td>
+            <td>@order.CreatedAt</td>
+            <td>@order.Status</td>
+            <td>@order.Deadline</td>
+            <td>
+                @foreach (var user in order.Users)
+                {
+                    <span>@user.UserName</span>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

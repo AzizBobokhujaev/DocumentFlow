@@ -8,7 +8,7 @@ public class Order
     public string DecreeFilePath { get; set; } = null!;
     public string? ExecutionFilePath { get; set; } 
     public DateTime CreatedAt { get; set; }
-    public virtual string Status { get; set; } = Entities.Status.InProgress.Name;
+    public string Status { get; set; } = null!;
     public DateOnly Deadline { get; set; }
     public virtual ICollection<User> Users { get; set; } = null!;
 }

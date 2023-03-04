@@ -9,6 +9,7 @@ public class DocumentFlowDbContext : IdentityDbContext<User, IdentityRole<int>, 
 {
     public DocumentFlowDbContext(DbContextOptions options) : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
     
     public DbSet<Order> Orders { get; set; }
