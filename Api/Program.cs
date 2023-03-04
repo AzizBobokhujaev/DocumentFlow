@@ -1,27 +1,41 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Api.DbContext;
+using Api.Models.Entities;
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+namespace Api;
 
-var app = builder.Build();
+public class Program
+{               
+    public static async Task Main(string[] args)
+    {
+        var host =  CreateHostBuilder(args).Build();
+        using var scope = host.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        try
+        {
+            var context = services.GetRequiredService<DocumentFlowDbContext>();
+            var userManager = services.GetRequiredService<UserManager<User>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+            await context.Database.MigrateAsync();
+
+            await ContextHelper.Seeding(context, userManager, roleManager);
+            logger.LogInformation("Migrate successful");
+
+        }
+        catch ( Exception ex)
+        {
+            logger.LogError(ex.Message);
+        }
+        await host.RunAsync();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
