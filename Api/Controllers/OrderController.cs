@@ -75,6 +75,8 @@ public class OrderController : Controller
 
         return View(model);
     }
+    
+   
 
     [HttpGet]
     public async Task<IActionResult> Index(string searchString, int pageNumber = 1)
@@ -110,4 +112,118 @@ public class OrderController : Controller
 
         return View(model);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetInProgressOrders(string searchString,int pageNumber = 1)
+    {
+        const int pageSize = 5;
+
+        var orders = _context.Orders.Where(order => order.Status == Status.InProgress.Name)
+            .OrderByDescending(order => order.CreatedAt)
+            .AsQueryable();
+     
+        
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                       b.Title.Contains(searchString) ||
+                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = orders.Count();
+        var items = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
+    }
+    
+    
+    [HttpGet]
+    public async Task<IActionResult> GetDoneOrders(string searchString,int pageNumber = 1)
+    {
+        const int pageSize = 5;
+
+        var orders = _context.Orders.Where(order => order.Status == Status.Done.Name)
+            .OrderByDescending(order => order.CreatedAt)
+            .AsQueryable();
+     
+        
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                       b.Title.Contains(searchString) ||
+                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = orders.Count();
+        var items = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
+    }
+    
+    
+    [HttpGet]
+    public async Task<IActionResult> GetNotDoneOrders(string searchString,int pageNumber = 1)
+    {
+        const int pageSize = 5;
+
+        var orders = _context.Orders.Where(order => order.Status == Status.NotDone.Name)
+            .OrderByDescending(order => order.CreatedAt)
+            .AsQueryable();
+     
+        
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                       b.Title.Contains(searchString) ||
+                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = orders.Count();
+        var items = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
+    }
+
 }
