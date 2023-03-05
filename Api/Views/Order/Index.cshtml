@@ -47,7 +47,11 @@
                 <td>
                     @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
                     {
-                        <a href="@Url.Content(order.ExecutionFilePath)" target="_blank">Download</a>
+                        <a href="@Url.Content($"/response-files/{order.DocumentNumber}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.DocumentNumber</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Добавить ответ</a>
                     }
                 </td>
                 <td>@order.CreatedAt</td>

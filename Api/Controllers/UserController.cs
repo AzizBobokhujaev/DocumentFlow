@@ -3,6 +3,7 @@ using Api.Models.Entities;
 using Api.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers;
 
@@ -41,6 +42,7 @@ public class UserController : Controller
         return RedirectToAction("Index", "Home");
     }
     
+    // ------------------------------------------------Register---------------------------------------------------------
     [HttpGet]
     public IActionResult Register()
     {
@@ -77,10 +79,21 @@ public class UserController : Controller
         return RedirectToAction("Login");
     }
     
+    // --------------------------------------------ChangePassword-------------------------------------------------------
     [HttpGet]
-    public IActionResult ChangePassword()
+    public async Task<IActionResult> ChangePassword(int id)
     {
-        return View();
+        var account = await _dbContext.Users.FindAsync(id);
+        if (account == null)
+        {
+            return RedirectToAction("UsersList");
+        }
+
+        var changePasswordVm = new ChangePasswordVm
+        {
+            Id = account.Id
+        };
+        return View(changePasswordVm);
     }
     
     [HttpPost]
@@ -104,5 +117,22 @@ public class UserController : Controller
         }
 
         return RedirectToAction("Login", "User");
+    }
+    
+    //--------------------------------------------------UsersList-------------------------------------------------------
+
+    [HttpGet]
+    public async Task<IActionResult> UsersList()
+    {
+        var users = await _dbContext.Users.ToListAsync();
+        return View(users);
+    }
+    
+    //--------------------------------------------------Logout----------------------------------------------------------
+    
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Login");
     }
 }

@@ -1,0 +1,20 @@
+@model List<Api.Models.Entities.User>
+<table class="table-bordered">
+    <thead>
+    <tr>
+        <th>Имя и фамилия</th>
+        <th>Телефон</th>
+        <th>Изменить пароль</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.PhoneNumber</td>
+                <td><a class="btn btn-info" href="~/User/ChangePassword?id=@user.Id">Изменить</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

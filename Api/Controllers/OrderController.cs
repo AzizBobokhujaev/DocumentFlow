@@ -226,4 +226,30 @@ public class OrderController : Controller
         return View(model);
     }
 
+    public async Task<IActionResult> SetExecutionFile(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        var model = new SetExecutionFileVm
+        {
+            Id = id
+        };
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SetExecutionFile(SetExecutionFileVm model)
+    {
+        if (!ModelState.IsValid) return RedirectToAction("Index");
+        var order = await _context.Orders.FindAsync(model.Id);
+        var fileName = string.Concat($"{order!.DocumentNumber}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+        var filePath = await _fileService.AddFileAsync(fileName, "response-files",
+            model.ExecutionFile);
+
+        order.ExecutionFilePath = filePath;
+        order.ExecutionFileCreatedAt = DateTime.Now;
+        order.Status = Status.Done.Name;
+        _context.Update(order);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
 }
