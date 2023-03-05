@@ -30,7 +30,7 @@
             <td>
                 @if (!string.IsNullOrEmpty(order.DecreeFilePath))
                 {
-                    <a href="@Url.Content(order.DecreeFilePath)" target="_blank">Download</a>
+                    <a href="@Url.Content("/files/"+order.DocumentNumber+".pdf")" target="_blank">@order.DocumentNumber</a>
                 }
             </td>
             <td>
@@ -41,7 +41,7 @@
             </td>
             <td>@order.CreatedAt</td>
             <td>@order.Status</td>
-            <td>@order.Deadline</td>
+            <td>@order.Deadline.ToString("dd/MM/yyyy")</td>
             <td>
                 @foreach (var user in order.Users)
                 {
