@@ -1,5 +1,6 @@
 using Api.DbContext;
 using Api.FileRootService;
+using Api.Models;
 using Api.Models.Entities;
 using Api.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +38,9 @@ public class OrderController : Controller
     {
         if (ModelState.IsValid)
         {
-            var filePath = await _fileService.AddFileAsync(model.DocumentNumber, "files", model.DecreeFile);
+            var fileName = string.Concat($"{model.DocumentNumber}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+            var filePath = await _fileService.AddFileAsync(fileName, "files",
+                model.DecreeFile);
             var order = new Order
             {
                 DocumentNumber = model.DocumentNumber,
@@ -74,9 +77,37 @@ public class OrderController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchString, int pageNumber = 1)
     {
-        var orders = await _context.Orders.ToListAsync();
-        return View(orders);
+        const int pageSize = 5;
+
+        var books = _context.Orders.AsSplitQuery();
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            books = books.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                     b.Title.Contains(searchString) ||
+                                     b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = books.Count();
+        var items = await books.Skip((pageNumber - 1) * pageSize).Take(pageSize)
+            .OrderByDescending(order => order.CreatedAt).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
     }
 }
