@@ -7,6 +7,7 @@ public class Order
     public string Title { get; set; } = null!;
     public string DecreeFilePath { get; set; } = null!;
     public string? ExecutionFilePath { get; set; } 
+    public DateTime? ExecutionFileCreatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public string Status { get; set; } = null!;
     public DateTime Deadline { get; set; }
