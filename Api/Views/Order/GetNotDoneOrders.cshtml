@@ -8,7 +8,7 @@
 </p>
 
 
-<form asp-controller="Order" asp-action="Index" method="get">
+<form asp-controller="Order" asp-action="GetNotDoneOrders" method="get">
     <div class="form-group">
         <label for="searchString">Search:</label>
         <input type="text" class="form-control" id="searchString" name="searchString" value="@Model.SearchString" />
@@ -68,21 +68,21 @@
             @if (Model.PagingInfo.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
+                    <a class="page-link" href="@Url.Action("GetNotDoneOrders", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
                 </li>
             }
 
             @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
             {
                 <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
+                    <a class="page-link" href="@Url.Action("GetNotDoneOrders", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
                 </li>
             }
 
             @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
+                    <a class="page-link" href="@Url.Action("GetNotDoneOrders", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
                 </li>
             }
         </ul>
