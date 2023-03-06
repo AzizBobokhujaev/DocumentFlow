@@ -9,7 +9,8 @@ public class Order
     public string? ExecutionFilePath { get; set; } 
     public DateTime? ExecutionFileCreatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
-    public string Status { get; set; } = null!;
+    public int StatusId { get; set; }
+    public virtual Status Status { get; set; } = null!;
     public DateTime Deadline { get; set; }
     public virtual ICollection<User> Users { get; set; } = null!;
 }

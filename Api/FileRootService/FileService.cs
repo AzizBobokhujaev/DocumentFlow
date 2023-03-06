@@ -28,4 +28,15 @@ public class FileService : IFileService
             return ex.Message;
         }
     }
+    
+    public async Task<bool> DeleteFileAsync(string fileName, string folder)
+    {
+        var path = Path.Combine(_webHostEnvironment.WebRootPath, folder, $"{fileName}.pdf");
+        if (File.Exists(path) == true)
+        {
+            await Task.Run(() => File.Delete(path)); 
+            return true;
+        }
+        return false;
+    }
 }

@@ -38,6 +38,7 @@ public class OrderController : Controller
     {
         if (ModelState.IsValid)
         {
+            var status = _context.Statuses.FirstOrDefault(status1 => status1.Id == 3);
             var fileName = string.Concat($"{model.DocumentNumber}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
             var filePath = await _fileService.AddFileAsync(fileName, "files",
                 model.DecreeFile);
@@ -46,7 +47,7 @@ public class OrderController : Controller
                 DocumentNumber = model.DocumentNumber,
                 Title = model.Title,
                 Deadline = model.Deadline,
-                Status = Status.InProgress.Name,
+                Status = status!,
                 CreatedAt = DateTime.Now,
                 DecreeFilePath = filePath,
                 Users = new List<User>()
@@ -118,7 +119,7 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var orders = _context.Orders.Where(order => order.Status == Status.InProgress.Name)
+        var orders = _context.Orders.Where(order => order.Status.Id == 1)
             .OrderByDescending(order => order.CreatedAt)
             .AsQueryable();
      
@@ -156,7 +157,7 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var orders = _context.Orders.Where(order => order.Status == Status.Done.Name)
+        var orders = _context.Orders.Where(order => order.Status.Id == 1)
             .OrderByDescending(order => order.CreatedAt)
             .AsQueryable();
      
@@ -194,7 +195,7 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var orders = _context.Orders.Where(order => order.Status == Status.NotDone.Name)
+        var orders = _context.Orders.Where(order => order.Status.Id == 2)
             .OrderByDescending(order => order.CreatedAt)
             .AsQueryable();
      
@@ -247,8 +248,130 @@ public class OrderController : Controller
 
         order.ExecutionFilePath = filePath;
         order.ExecutionFileCreatedAt = DateTime.Now;
-        order.Status = Status.Done.Name;
+        order.StatusId = 1;
         _context.Update(order);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+    
+    public async Task<IActionResult> Edit(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        var users = _context.Users.ToList();
+        
+        var model = new EditOrderVm
+        {
+            Id = order.Id,
+            Title = order.Title,
+            Deadline = order.Deadline,
+            StatusId = order.StatusId,
+            Users = users.Select(u => new SelectListItem
+            {
+                Text = u.UserName,
+                Value = u.Id.ToString(),
+                Selected = order.Users.Any(o => o.Id == u.Id)
+            }).ToList()
+
+        };
+
+        ViewBag.Statuses = _context.Statuses.ToList();
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, EditOrderVm model)
+    {
+        if (id != model.Id)
+        {
+            return NotFound();
+        }
+
+        var order = await _context.Orders
+            .Include(o => o.Users)
+            .FirstOrDefaultAsync(o => o.Id == id);
+
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            order.Title = model.Title;
+            order.StatusId = model.StatusId;
+            order.Deadline = model.Deadline;
+
+            if (model.ResponseFile != null && order.ExecutionFilePath is null)
+            {
+                var fileName = string.Concat($"{order.DocumentNumber}-response-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+                var filePath = await _fileService.AddFileAsync(fileName, "response-files",
+                    model.ResponseFile);
+                order.ExecutionFilePath = filePath;
+                order.ExecutionFileCreatedAt = DateTime.Now;
+            }
+
+            order.Users.Clear();
+
+            foreach (var userId in model.UserIds)
+            {
+                var user = await _context.Users.FindAsync(userId);
+                if (user != null)
+                {
+                    order.Users.Add(user);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            
+        }
+
+        model.Users = _context.Users.Select(u => new SelectListItem
+        {
+            Text = u.UserName,
+            Value = u.Id.ToString(),
+            Selected = model.UserIds.Contains(u.Id)
+        }).ToList();
+
+        return View(model);
+    }
+
+    
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        var model = new DeleteOrderVm { Id = order.Id };
+        return View(model);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+
+        _context.Orders.Remove(order);
         await _context.SaveChangesAsync();
         return RedirectToAction("Index");
     }

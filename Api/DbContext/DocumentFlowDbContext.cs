@@ -13,6 +13,7 @@ public class DocumentFlowDbContext : IdentityDbContext<User, IdentityRole<int>, 
     }
     
     public DbSet<Order> Orders { get; set; }
+    public DbSet<Status> Statuses { get; set; }
     public override DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -26,6 +27,12 @@ public class DocumentFlowDbContext : IdentityDbContext<User, IdentityRole<int>, 
         builder.Entity<IdentityUserLogin<int>>(entity => entity.ToTable("UserLogins"));
         builder.Entity<IdentityUserToken<int>>(entity => entity.ToTable("UserTokens"));
         builder.Entity<IdentityRoleClaim<int>>(entity => entity.ToTable("RoleClaims"));
+        builder.Entity<Status>().HasData
+        (
+            new Status { Id = 1, Name = "Иҷро шуд" },
+            new Status { Id = 2, Name = "Иҷро нашуд" },
+            new Status() { Id = 3, Name = "Дар ҳолати иҷроиш" }
+        );
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

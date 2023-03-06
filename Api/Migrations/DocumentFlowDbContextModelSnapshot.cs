@@ -50,9 +50,8 @@ namespace Api.Migrations
                     b.Property<string>("ExecutionFilePath")
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -60,7 +59,43 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("StatusId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Api.Models.Entities.Status", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Иҷро шуд"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Иҷро нашуд"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Дар ҳолати иҷроиш"
+                        });
                 });
 
             modelBuilder.Entity("Api.Models.Entities.User", b =>
@@ -275,6 +310,17 @@ namespace Api.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("OrderUser");
+                });
+
+            modelBuilder.Entity("Api.Models.Entities.Order", b =>
+                {
+                    b.HasOne("Api.Models.Entities.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

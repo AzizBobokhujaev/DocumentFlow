@@ -30,6 +30,8 @@
             <th>Deadline</th>
             <th>Users</th>
             <th></th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -55,13 +57,19 @@
                     }
                 </td>
                 <td>@order.CreatedAt</td>
-                <td>@order.Status</td>
+                <td>@order.Status.Name</td>
                 <td>@order.Deadline.ToString("dd/MM/yyyy")</td>
                 <td>
                     @foreach (var user in order.Users)
                     {
                         <span>@user.UserName</span>
                     }
+                </td>
+                <td>
+                    <a class="btn btn-info" href="~/Order/Edit?id=@order.Id">Изменить</a>
+                </td>
+                <td>
+                    <a class="btn btn-danger" href="~/Order/Delete?id=@order.Id">Удалить</a>
                 </td>
             </tr>
         }
