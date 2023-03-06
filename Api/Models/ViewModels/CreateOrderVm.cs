@@ -5,6 +5,7 @@ namespace Api.Models.ViewModels;
 
 public class CreateOrderVm
 {
+    
     public string DocumentNumber { get; set; } = null!;
     public string Title { get; set; } = null!;
     public IFormFile DecreeFile { get; set; } = null!;

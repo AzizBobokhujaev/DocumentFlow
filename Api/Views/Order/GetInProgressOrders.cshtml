@@ -1,0 +1,94 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Api.Models.ViewModels.OrdersListViewModel
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<form asp-controller="Order" asp-action="GetInProgressOrders" method="get">
+    <div class="form-group">
+        <label for="searchString">Search:</label>
+        <input type="text" class="form-control" id="searchString" name="searchString" value="@Model.SearchString" />
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if(Model.Orders.Any()){
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Document Number</th>
+            <th>Title</th>
+            <th>Decree File</th>
+            <th>Execution File</th>
+            <th>Created At</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th>Users</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <td>@order.DocumentNumber</td>
+                <td>@order.Title</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(order.DecreeFilePath))
+                    {
+                        <a href="@Url.Content("/files/"+order.DocumentNumber+"-"+order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss")+".pdf")" target="_blank">@order.DocumentNumber</a>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
+                    {
+                        <a href="@Url.Content($"/response-files/{order.DocumentNumber}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.DocumentNumber</a>
+                    }
+                </td>
+                <td>@order.CreatedAt</td>
+                <td>@order.Status</td>
+                <td>@order.Deadline.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @foreach (var user in order.Users)
+                    {
+                        <span>@user.UserName</span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <nav aria-label="Books navigation">
+        <ul class="pagination">
+            @if (Model.PagingInfo.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("GetInProgressOrders", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("GetInProgressOrders", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
+                </li>
+            }
+
+            @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("GetInProgressOrders", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+else
+{
+    <p>No documrnts found.</p>
+}
