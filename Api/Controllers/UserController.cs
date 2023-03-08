@@ -1,4 +1,5 @@
 using Api.DbContext;
+using Api.Models;
 using Api.Models.Entities;
 using Api.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -116,16 +117,41 @@ public class UserController : Controller
             return BadRequest(ModelState);
         }
 
-        return RedirectToAction("Login", "User");
+        return RedirectToAction("UsersList");
     }
     
     //--------------------------------------------------UsersList-------------------------------------------------------
 
     [HttpGet]
-    public async Task<IActionResult> UsersList()
+    public async Task<IActionResult> UsersList(string searchString, int pageNumber = 1)
     {
-        var users = await _dbContext.Users.Where(user => user.UserName != "Admin").ToListAsync();
-        return View(users);
+        const int pageSize = 5;
+        var users =  _dbContext.Users.Where(user => user.UserName != "Admin").AsQueryable();
+        
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            var text = searchString.ToUpper();
+            users = users.Where(b => b.UserName.ToUpper().Contains(text) || 
+                                     b.PhoneNumber.ToUpper().Contains(text));
+        }
+        
+        var count = users.Count();
+        var items = await users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+        
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+        
+        var model = new UsersListViewModel
+        {
+            Users = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+        return View(model);
     }
     
     //--------------------------------------------------Logout----------------------------------------------------------
@@ -134,5 +160,42 @@ public class UserController : Controller
     {
         await _signInManager.SignOutAsync();
         return RedirectToAction("Login");
+    }
+    
+    //-------------------------------------------------Edit_User--------------------------------------------------------
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var account = await _dbContext.Users.FindAsync(id);
+        if (account == null)
+        {
+            return RedirectToAction("UsersList");
+        }
+
+        var editUserVm = new EditUserVm()
+        {
+            Id = account.Id,
+            UserName = account.UserName,
+            PhoneNumber = account.PhoneNumber
+        };
+        return View(editUserVm);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Edit(EditUserVm model)
+    {
+        var user = await _userManager.FindByIdAsync(model.Id.ToString());
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.UserName = model.UserName;
+        user.PhoneNumber = model.PhoneNumber;
+
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
+
+        return RedirectToAction("UsersList");
     }
 }
