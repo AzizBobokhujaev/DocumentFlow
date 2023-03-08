@@ -3,7 +3,6 @@ using Api.FileRootService;
 using Api.Models;
 using Api.Models.Entities;
 using Api.Models.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -155,7 +154,6 @@ public class OrderController : Controller
         return View(model);
     }
     
-    
     [HttpGet]
     public async Task<IActionResult> GetDoneOrders(string searchString,int pageNumber = 1)
     {
@@ -192,7 +190,6 @@ public class OrderController : Controller
 
         return View(model);
     }
-    
     
     [HttpGet]
     public async Task<IActionResult> GetNotDoneOrders(string searchString, int pageNumber = 1)
@@ -275,6 +272,7 @@ public class OrderController : Controller
             Title = order.Title,
             Deadline = order.Deadline,
             StatusId = order.StatusId,
+            ExecutionFilePath = order.ExecutionFilePath,
             Users = users.Select(u => new SelectListItem
             {
                 Text = u.UserName,
@@ -346,7 +344,6 @@ public class OrderController : Controller
 
         return View(model);
     }
-
     
     public async Task<IActionResult> Delete(int? id)
     {

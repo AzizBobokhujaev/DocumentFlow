@@ -39,7 +39,7 @@ public class UserController : Controller
             return View(model);
         }
 
-        return RedirectToAction("Index", "Home");
+        return RedirectToAction("Index", "Order");
     }
     
     // ------------------------------------------------Register---------------------------------------------------------
@@ -124,7 +124,7 @@ public class UserController : Controller
     [HttpGet]
     public async Task<IActionResult> UsersList()
     {
-        var users = await _dbContext.Users.ToListAsync();
+        var users = await _dbContext.Users.Where(user => user.UserName != "Admin").ToListAsync();
         return View(users);
     }
     
