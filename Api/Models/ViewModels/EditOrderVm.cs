@@ -11,4 +11,5 @@ public class EditOrderVm
     public DateTime Deadline { get; set; }
     public List<SelectListItem> Users { get; set; } = new();
     public List<int> UserIds { get; set; } = new();
+    public string? ExecutionFilePath { get; set; }
 }

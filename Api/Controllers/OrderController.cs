@@ -3,7 +3,6 @@ using Api.FileRootService;
 using Api.Models;
 using Api.Models.Entities;
 using Api.Models.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -88,18 +87,18 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var books = _context.Orders.AsSplitQuery();
+        var books = _context.Orders.OrderByDescending(order => order.CreatedAt).AsSplitQuery();
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            books = books.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                     b.Title.Contains(searchString) ||
-                                     b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            books = books.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                     b.Title.ToUpper().Contains(text) ||
+                                     b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = books.Count();
-        var items = await books.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-            .OrderByDescending(order => order.CreatedAt).ToListAsync();
+        var items = await books.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
         var pagingInfo = new PagingInfo
         {
@@ -130,9 +129,10 @@ public class OrderController : Controller
         
         if (!string.IsNullOrEmpty(searchString))
         {
-            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                       b.Title.Contains(searchString) ||
-                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                     b.Title.ToUpper().Contains(text) ||
+                                     b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = orders.Count();
@@ -154,7 +154,6 @@ public class OrderController : Controller
 
         return View(model);
     }
-    
     
     [HttpGet]
     public async Task<IActionResult> GetDoneOrders(string searchString,int pageNumber = 1)
@@ -168,9 +167,10 @@ public class OrderController : Controller
         
         if (!string.IsNullOrEmpty(searchString))
         {
-            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                       b.Title.Contains(searchString) ||
-                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                       b.Title.ToUpper().Contains(text) ||
+                                       b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = orders.Count();
@@ -193,7 +193,6 @@ public class OrderController : Controller
         return View(model);
     }
     
-    
     [HttpGet]
     public async Task<IActionResult> GetNotDoneOrders(string searchString, int pageNumber = 1)
     {
@@ -206,9 +205,10 @@ public class OrderController : Controller
         
         if (!string.IsNullOrEmpty(searchString))
         {
-            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                       b.Title.Contains(searchString) ||
-                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                       b.Title.ToUpper().Contains(text) ||
+                                       b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = orders.Count();
@@ -275,6 +275,7 @@ public class OrderController : Controller
             Title = order.Title,
             Deadline = order.Deadline,
             StatusId = order.StatusId,
+            ExecutionFilePath = order.ExecutionFilePath,
             Users = users.Select(u => new SelectListItem
             {
                 Text = u.UserName,
@@ -310,7 +311,14 @@ public class OrderController : Controller
         if (ModelState.IsValid)
         {
             order.Title = model.Title;
-            order.StatusId = model.StatusId;
+            if (model.StatusId != order.StatusId)
+            {
+                order.StatusId = model.StatusId;
+            }
+            else if (order.StatusId == model.StatusId && (model.Deadline != order.Deadline || model.Deadline > DateTime.Now))
+            {
+                order.StatusId = InProgressStatusId;
+            }
             order.Deadline = model.Deadline;
 
             if (model.ResponseFile != null && order.ExecutionFilePath is null)
@@ -320,6 +328,7 @@ public class OrderController : Controller
                     model.ResponseFile);
                 order.ExecutionFilePath = filePath;
                 order.ExecutionFileCreatedAt = DateTime.Now;
+                order.StatusId = DoneStatusId;
             }
 
             order.Users.Clear();
@@ -346,7 +355,6 @@ public class OrderController : Controller
 
         return View(model);
     }
-
     
     public async Task<IActionResult> Delete(int? id)
     {
@@ -392,9 +400,10 @@ public class OrderController : Controller
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                                    b.Title.Contains(searchString) ||
-                                                    b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                       b.Title.ToUpper().Contains(text) ||
+                                       b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = orders.Count();
@@ -429,9 +438,10 @@ public class OrderController : Controller
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                                    b.Title.Contains(searchString) ||
-                                                    b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                       b.Title.ToUpper().Contains(text) ||
+                                       b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = orders.Count();
@@ -466,9 +476,10 @@ public class OrderController : Controller
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
-                                       b.Title.Contains(searchString) ||
-                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+            var text = searchString.ToUpper();
+            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
+                                       b.Title.ToUpper().Contains(text) ||
+                                       b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
         var count = orders.Count();

@@ -1,20 +1,69 @@
-@model List<Api.Models.Entities.User>
-<table class="table-bordered">
-    <thead>
-    <tr>
-        <th>Имя и фамилия</th>
-        <th>Телефон</th>
-        <th>Изменить пароль</th>
-    </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Api.Models.ViewModels.UsersListViewModel
+
+<h1>Users</h1>
+
+<form asp-controller="User" asp-action="UsersList" method="get">
+    <div class="form-group">
+        <label for="searchString">Search:</label>
+        <input type="text" class="form-control" id="searchString" name="searchString" value="@Model.SearchString" />
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if(Model.Users.Any()){
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Имя Фамилия</th>
+            <th>Телефон</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model.Users)
         {
             <tr>
                 <td>@user.UserName</td>
                 <td>@user.PhoneNumber</td>
-                <td><a class="btn btn-info" href="~/User/ChangePassword?id=@user.Id">Изменить</a></td>
+                <td>
+                    <a class="btn btn-info" href="~/User/ChangePassword?id=@user.Id">Изменить пароль</a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-success" href="~/User/Edit?id=@user.Id">Изменить пользователя</a>
+                </td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <nav aria-label="Books navigation">
+        <ul class="pagination">
+            @if (Model.PagingInfo.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
+                </li>
+            }
+
+            @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+else
+{
+    <p>No documrnts found.</p>
+}
