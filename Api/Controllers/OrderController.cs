@@ -3,6 +3,7 @@ using Api.FileRootService;
 using Api.Models;
 using Api.Models.Entities;
 using Api.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,9 @@ public class OrderController : Controller
     private readonly DocumentFlowDbContext _context;
     private readonly UserManager<User> _userManager;
     private readonly IFileService _fileService;
+    private const int DoneStatusId = 1;
+    private const int NotDoneStatusId = 2;
+    private const int InProgressStatusId = 3;
 
     public OrderController(DocumentFlowDbContext context, UserManager<User> userManager, IFileService fileService)
     {
@@ -38,7 +42,7 @@ public class OrderController : Controller
     {
         if (ModelState.IsValid)
         {
-            var status = _context.Statuses.FirstOrDefault(status1 => status1.Id == 3);
+            var status = _context.Statuses.FirstOrDefault(status1 => status1.Id == InProgressStatusId);
             var fileName = string.Concat($"{model.DocumentNumber}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
             var filePath = await _fileService.AddFileAsync(fileName, "files",
                 model.DecreeFile);
@@ -119,7 +123,7 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var orders = _context.Orders.Where(order => order.Status.Id == 1)
+        var orders = _context.Orders.Where(order => order.Status.Id == InProgressStatusId)
             .OrderByDescending(order => order.CreatedAt)
             .AsQueryable();
      
@@ -157,7 +161,7 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var orders = _context.Orders.Where(order => order.Status.Id == 1)
+        var orders = _context.Orders.Where(order => order.Status.Id == DoneStatusId)
             .OrderByDescending(order => order.CreatedAt)
             .AsQueryable();
      
@@ -191,11 +195,11 @@ public class OrderController : Controller
     
     
     [HttpGet]
-    public async Task<IActionResult> GetNotDoneOrders(string searchString,int pageNumber = 1)
+    public async Task<IActionResult> GetNotDoneOrders(string searchString, int pageNumber = 1)
     {
         const int pageSize = 5;
 
-        var orders = _context.Orders.Where(order => order.Status.Id == 2)
+        var orders = _context.Orders.Where(order => order.Status.Id == NotDoneStatusId)
             .OrderByDescending(order => order.CreatedAt)
             .AsQueryable();
      
@@ -374,5 +378,116 @@ public class OrderController : Controller
         _context.Orders.Remove(order);
         await _context.SaveChangesAsync();
         return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetMyDoneOrders(string searchString, int pageNumber = 1)
+    {
+        const int pageSize = 5;
+
+        var orders = _context.Orders.Where(order => order.Users.Any(user => user.UserName == User.Identity!.Name)
+                                                    && order.StatusId == DoneStatusId)
+            .OrderByDescending(order => order.CreatedAt).AsQueryable();
+
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                                    b.Title.Contains(searchString) ||
+                                                    b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = orders.Count();
+        var items = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetMyNotDoneOrders(string searchString, int pageNumber = 1)
+    {
+        const int pageSize = 5;
+
+        var orders = _context.Orders.Where(order => order.Users.Any(user => user.UserName == User.Identity!.Name)
+                                                    && order.StatusId == NotDoneStatusId)
+            .OrderByDescending(order => order.CreatedAt).AsQueryable();
+
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                                    b.Title.Contains(searchString) ||
+                                                    b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = orders.Count();
+        var items = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetMyInProgressOrders(string searchString, int pageNumber = 1)
+    {
+        const int pageSize = 5;
+
+        var orders = _context.Orders.Where(order => order.Users.Any(user => user.UserName == User.Identity!.Name)
+                                                    && order.StatusId == InProgressStatusId)
+            .OrderByDescending(order => order.CreatedAt).AsQueryable();
+
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            orders = orders.Where(b => b.DocumentNumber.Contains(searchString) || 
+                                       b.Title.Contains(searchString) ||
+                                       b.Users.Any(category => category.UserName.Contains(searchString)));
+        }
+
+        var count = orders.Count();
+        var items = await orders.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        var pagingInfo = new PagingInfo
+        {
+            CurrentPage = pageNumber,
+            ItemsPerPage = pageSize,
+            TotalItems = count
+        };
+
+        var model = new OrdersListViewModel
+        {
+            Orders = items,
+            PagingInfo = pagingInfo,
+            SearchString = searchString
+        };
+
+        return View(model);
     }
 }
