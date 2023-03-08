@@ -10,10 +10,10 @@
             <form asp-controller="Order" asp-action="Index" method="get">
                 <div class="d-flex ">
                     <div class="form-group ">
-                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Ҷустуҷу" value="@Model.SearchString"/>
+                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Ҷустуҷӯ" value="@Model.SearchString"/>
                     </div>
                     <div class="ms-2">
-                        <button type="submit" class="btn btn-primary">Ҷустуҷу</button>
+                        <button type="submit" class="btn btn-primary">Ҷустуҷӯ</button>
                     </div>
                 </div>
             </form>
@@ -65,7 +65,14 @@
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.CreatedAt</td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
-                    <td class="border border-dark-subtle" style="width: 8%">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                    @if (DateTime.Now >= order.Deadline)
+                    {
+                        <td class="border border-dark-subtle" style="width: 8%; color: red">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                    }
+                    else
+                    {
+                        <td class="border border-dark-subtle" style="width: 8%; color: lawngreen">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                    }
                     <td class="border border-dark-subtle" style="width: 28%">
                         @foreach (var user in order.Users)
                         {

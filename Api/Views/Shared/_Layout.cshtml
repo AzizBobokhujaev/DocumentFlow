@@ -10,21 +10,19 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow ">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Api</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <li class="nav-item  " style=" ">
+                        <a class="nav-link text-dark" style="font-size: 15px;" asp-area="" asp-controller="Home" asp-action="Index" >Асосӣ</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
+                  
                 </ul>
                 <ul class="nav col-auto col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 
@@ -49,17 +47,69 @@
         </div>
     </nav>
 </header>
-<div class="">
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
-</div>
+<div class="" style="background-color:white">
+        @if (User.IsInRole("Admin"))
+        {
+            <div class=" d-flex ">
+                <div style="width: 20%; background-color: #C1E3F5; height: 440px; border-radius: 8px; border: 1px solid rgb(94,187,241);">
+                    <ul >
+                        <li  style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/Index" style="text-decoration: none; color: black;">Index</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetInprogressorders"  style="text-decoration: none; color: black;">GetInProgress</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetDoneOrders"  style="text-decoration: none; color: black;">GetDone</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetNotDoneOrders"  style="text-decoration: none; color: black;">GetNotDone</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../User/UsersList"  style="text-decoration: none; color: black;">Users</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../User/Register"  style="text-decoration: none; color: black;">Register</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/Create"  style="text-decoration: none; color: black;">Create</a></li>
+                    </ul>
+                </div>
+                <div style="width:80%; border-radius: 8px; border: 1px solid rgb(94,187,241);">
+                        <main role="main" class="pb-3">
+                            @RenderBody()
+                        </main>
+                    </div>
+                </div>
+               
+                }
+                else
+                {
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2023 - Api - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
+                    if (User.IsInRole("User"))
+                    {
+                        <div class=" d-flex ">
+                           <div style="width: 20%; background-color: #C1E3F5; height: 440px; border-radius: 8px; border: 1px solid rgb(94,187,241);">
+                               <ul>
+                                    <li  style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyInprogressorders" style="text-decoration: none; color: black;">GetMyInprogressorders</a></li>
+                                                           <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyDoneOrders"  style="text-decoration: none; color: black;">GetMyDoneOrders</a></li>
+                                                           <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyNotDoneOrders"  style="text-decoration: none; color: black;">GetMyNotDoneOrders</a></li>
+                                   
+                               </ul>
+                            </div>
+                            <div style="width:80%; border-radius: 8px; border: 1px solid rgb(94,187,241);">
+                                <main role="main" class="pb-3">
+                                    @RenderBody()
+                                </main>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="">
+                            <main role="main" class="pb-3">
+                                @RenderBody()
+                            </main>
+                        </div>
+                    }
+                }
+            </div>
+             <style>
+                            .my-element:hover{
+                            color: #3C4043;
+                            background-color: #F1E9FE;
+                            border-radius: 5px;
+                            padding: 4px 8px 4px 8px;
+                            
+                            }
+                            </style>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
