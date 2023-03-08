@@ -5,7 +5,7 @@ namespace Api.Models.ViewModels;
 public class RegisterVm
 {
     [Required] 
-    [Display(Name = "Номи истифодабаранда")] 
+    [Display(Name = "Ному насаби истифодабаранда")] 
     public string UserName { get; set; } = string.Empty;
     public string UserRole { get; set; } = string.Empty;
 
