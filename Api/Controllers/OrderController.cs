@@ -87,7 +87,7 @@ public class OrderController : Controller
     {
         const int pageSize = 5;
 
-        var books = _context.Orders.AsSplitQuery();
+        var books = _context.Orders.OrderByDescending(order => order.CreatedAt).AsSplitQuery();
 
         if (!string.IsNullOrEmpty(searchString))
         {
@@ -97,8 +97,7 @@ public class OrderController : Controller
         }
 
         var count = books.Count();
-        var items = await books.Skip((pageNumber - 1) * pageSize).Take(pageSize)
-            .OrderByDescending(order => order.CreatedAt).ToListAsync();
+        var items = await books.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
         var pagingInfo = new PagingInfo
         {
@@ -308,7 +307,14 @@ public class OrderController : Controller
         if (ModelState.IsValid)
         {
             order.Title = model.Title;
-            order.StatusId = model.StatusId;
+            if (model.StatusId != order.StatusId)
+            {
+                order.StatusId = model.StatusId;
+            }
+            else if (order.StatusId == model.StatusId && (model.Deadline != order.Deadline || model.Deadline > DateTime.Now))
+            {
+                order.StatusId = InProgressStatusId;
+            }
             order.Deadline = model.Deadline;
 
             if (model.ResponseFile != null && order.ExecutionFilePath is null)
@@ -318,6 +324,7 @@ public class OrderController : Controller
                     model.ResponseFile);
                 order.ExecutionFilePath = filePath;
                 order.ExecutionFileCreatedAt = DateTime.Now;
+                order.StatusId = DoneStatusId;
             }
 
             order.Users.Clear();

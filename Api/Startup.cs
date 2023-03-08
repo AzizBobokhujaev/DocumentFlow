@@ -1,6 +1,8 @@
 using Api.DbContext;
 using Api.FileRootService;
 using Api.Models.Entities;
+using Api.ScheduleWorkers;
+using Api.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +52,9 @@ public class Startup
                 option.SlidingExpiration = true;
             });
 
+            services.AddHostedService<ScheduleWorker>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddControllersWithViews();
         }
 
