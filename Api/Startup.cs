@@ -52,7 +52,7 @@ public class Startup
                 option.SlidingExpiration = true;
             });
 
-            services.AddHostedService<ScheduleWorker>();
+            //services.AddHostedService<ScheduleWorker>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddControllersWithViews();
