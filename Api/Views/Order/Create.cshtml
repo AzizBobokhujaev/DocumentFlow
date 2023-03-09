@@ -11,15 +11,25 @@
                     <span asp-validation-for="DocumentNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group mt-3">
+                    <label asp-for="ImportDate"></label>
+                    <input asp-for="ImportDate" class="form-control" />
+                    <span asp-validation-for="ImportDate" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <label asp-for="DecreeName"></label>
+                    <input asp-for="DecreeName" class="form-control" />
+                    <span asp-validation-for="DecreeName" class="text-danger"></span>
+                </div>
+                <div class="form-group mt-3">
                     <label asp-for="Title"></label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                    <div class="form-group mt-3">
-                                    <label asp-for="DecreeFile"></label>
-                                    <input asp-for="DecreeFile" class="form-control" />
-                                    <span asp-validation-for="DecreeFile" class="text-danger"></span>
-                                </div>
+                       <label asp-for="DecreeFile"></label>
+                       <input asp-for="DecreeFile" class="form-control" />
+                       <span asp-validation-for="DecreeFile" class="text-danger"></span>
+                   </div>
                
                 <div class="form-group mt-3">
                     <label asp-for="Deadline"></label>
@@ -30,7 +40,7 @@
     
                 <div class="dropdown mt-3">
                     <label asp-for="Users"></label>
-                    <button style=" background-color: white; color: black; width: 100%" class="btn btn-secondary  dropdown-toggle text-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button style="background-color: white; color: black; width: 100%" class="btn btn-secondary  dropdown-toggle text-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -42,6 +52,30 @@
                             </div>
                         }
                     </ul>
+                    <script>
+                        const dropdownBtn = document.querySelector('.dropdown-toggle');
+                        const checkboxes = document.querySelectorAll('input[type=checkbox]');
+                        const selectedUsers = [];
+                    
+                        checkboxes.forEach((checkbox) => {
+                            checkbox.addEventListener('change', (event) => {
+                                const isChecked = event.target.checked;
+                                const userId = event.target.value;
+                                const userName = event.target.nextElementSibling.innerText;
+                    
+                                if (isChecked) {
+                                    selectedUsers.push({ id: userId, name: userName });
+                                } else {
+                                    const index = selectedUsers.findIndex((user) => user.id === userId);
+                                    selectedUsers.splice(index, 1);
+                                }
+                    
+                                const selectedUserNames = selectedUsers.map((user) => user.name).join(', ');
+                                dropdownBtn.innerText = selectedUserNames || 'Select users';
+                            });
+                        });
+                    </script>
+
                 </div>
                 <div class="text-end">
                 <button type="submit" class="btn btn-primary mt-3" style="padding:6px 20px">Сабт</button>

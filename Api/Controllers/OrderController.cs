@@ -42,11 +42,13 @@ public class OrderController : Controller
         if (ModelState.IsValid)
         {
             var status = _context.Statuses.FirstOrDefault(status1 => status1.Id == InProgressStatusId);
-            var fileName = string.Concat($"{model.DocumentNumber}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+            var fileName = string.Concat($"{model.DecreeName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
             var filePath = await _fileService.AddFileAsync(fileName, "files",
                 model.DecreeFile);
             var order = new Order
             {
+                DecreeName = model.DecreeName,
+                ImportDate = model.ImportDate,
                 DocumentNumber = model.DocumentNumber,
                 Title = model.Title,
                 Deadline = model.Deadline,
@@ -246,11 +248,12 @@ public class OrderController : Controller
     {
         if (!ModelState.IsValid) return RedirectToAction("Index");
         var order = await _context.Orders.FindAsync(model.Id);
-        var fileName = string.Concat($"{order!.DocumentNumber}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+        var fileName = string.Concat($"{order!.ExecutionDocumentName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
         var filePath = await _fileService.AddFileAsync(fileName, "response-files",
             model.ExecutionFile);
 
         order.ExecutionFilePath = filePath;
+        order.ExecutionDocumentName = model.ExecutionDocumentName;
         order.ExecutionFileCreatedAt = DateTime.Now;
         order.StatusId = 1;
         _context.Update(order);
@@ -276,6 +279,7 @@ public class OrderController : Controller
             Deadline = order.Deadline,
             StatusId = order.StatusId,
             ExecutionFilePath = order.ExecutionFilePath,
+            ExecutionDocumentName = order.ExecutionDocumentName,
             Users = users.Select(u => new SelectListItem
             {
                 Text = u.UserName,
@@ -323,10 +327,11 @@ public class OrderController : Controller
 
             if (model.ResponseFile != null && order.ExecutionFilePath is null)
             {
-                var fileName = string.Concat($"{order.DocumentNumber}-response-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+                var fileName = string.Concat($"{order.ExecutionDocumentName}-response-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
                 var filePath = await _fileService.AddFileAsync(fileName, "response-files",
                     model.ResponseFile);
                 order.ExecutionFilePath = filePath;
+                order.ExecutionDocumentName = model.ExecutionDocumentName;
                 order.ExecutionFileCreatedAt = DateTime.Now;
                 order.StatusId = DoneStatusId;
             }

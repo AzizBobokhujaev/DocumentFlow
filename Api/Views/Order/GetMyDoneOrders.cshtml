@@ -49,13 +49,13 @@
                             <td class="border border-dark-subtle" style="width: 10%">
                                 @if (!string.IsNullOrEmpty(order.DecreeFilePath))
                                 {
-                                    <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentNumber + "-" + order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss") + ".pdf")" target="_blank">@order.DocumentNumber</a>
+                                    <a class="text-decoration-none" href="@Url.Content("/files/" + order.DecreeName + "-" + order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss") + ".pdf")" target="_blank">@order.DecreeName</a>
                                 }
                             </td>
                             <td class="border border-dark-subtle" style="width: 10%">
                                 @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
                                 {
-                                    <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.DocumentNumber}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.DocumentNumber</a>
+                                    <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ExecutionDocumentName}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.ExecutionDocumentName</a>
                                 }
                                 else
                                 {

@@ -10,6 +10,7 @@ public class EditOrderVm
     [Display(Name = "Мавзуъ")]
     public string Title { get; set; } = null!;
     public int StatusId { get; set; }
+    public string? ExecutionDocumentName { get; set; }
     public IFormFile? ResponseFile { get; set; }
     [Required]
     [Display(Name = "Муҳлоти иҷроиш")]

@@ -27,6 +27,8 @@
             <thead>
             <tr class="border border-dark-subtle text-center bg-danger bg-opacity-50">
                 <th class="border border-dark-subtle text-center" style="width: 8%">№</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Санаи воридшавии хуччат</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Номи хуччат</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Мавзуъ</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Фармон</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Ҷавоб</th>
@@ -44,17 +46,19 @@
             {
                 <tr>
                     <td class="border border-dark-subtle" style="width: 8%">@order.DocumentNumber</td>
+                    <td class="border border-dark-subtle" style="width: 8%">@order.ImportDate</td>
+                    <td class="border border-dark-subtle" style="width: 8%">@order.DecreeName</td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.Title</td>
                     <td class="border border-dark-subtle" style="width: 8%">
                         @if (!string.IsNullOrEmpty(order.DecreeFilePath))
                         {
-                            <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentNumber + "-" + order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss") + ".pdf")" target="_blank">@order.DocumentNumber</a>
+                            <a class="text-decoration-none" href="@Url.Content("/files/" + order.DecreeName + "-" + order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss") + ".pdf")" target="_blank">@order.DecreeName</a>
                         }
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">
                         @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
                         {
-                            <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.DocumentNumber}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.DocumentNumber</a>
+                            <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ExecutionDocumentName}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.ExecutionDocumentName</a>
                         }
                         else
                         {
@@ -106,7 +110,7 @@
                 @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба неш</a>
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба пеш</a>
                     </li>
                 }
             </ul>

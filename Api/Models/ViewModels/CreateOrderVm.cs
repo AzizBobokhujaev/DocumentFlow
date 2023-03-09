@@ -9,6 +9,12 @@ public class CreateOrderVm
     [Display(Name = "Рақами ҳуҷҷат")]
     public string DocumentNumber { get; set; } = null!;
     [Required]
+    [Display(Name = "Санаи воридшавии ҳуҷҷат")]
+    public string ImportDate { get; set; } = null!;
+    [Required]
+    [Display(Name = "Номи ҳуҷҷат")]
+    public string DecreeName { get; set; } = null!;
+    [Required]
     [Display(Name = "Мавзуъ")]
     public string Title { get; set; } = null!;
     [Required]

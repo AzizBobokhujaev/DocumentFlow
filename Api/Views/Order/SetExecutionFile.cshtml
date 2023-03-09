@@ -3,6 +3,11 @@
     <form method="post" asp-action="SetExecutionFile" asp-controller="Order" enctype="multipart/form-data">
         <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="Id" /> 
+        <div class="form-group mt-3">
+            <label asp-for="ExecutionDocumentName"></label>
+            <input asp-for="ExecutionDocumentName" class="form-control" />
+            <span asp-validation-for="ExecutionDocumentName" class="text-danger"></span>
+        </div>
         <div class="form-group w-25">
             <label asp-for="ExecutionFile"></label>
             <input asp-for="ExecutionFile" type="file" class="form-control" />
