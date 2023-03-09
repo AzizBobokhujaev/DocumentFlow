@@ -1,25 +1,33 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Api.Models.ViewModels.UsersListViewModel
 
-<h1>Users</h1>
 
-<form asp-controller="User" asp-action="UsersList" method="get">
-    <div class="form-group">
-        <label for="searchString">Search:</label>
-        <input type="text" class="form-control" id="searchString" name="searchString" value="@Model.SearchString" />
-    </div>
-    <br/>
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
-
-@if(Model.Users.Any()){
+<div class="d-flex justify-content-center">
+    <div style="width: 95%">
+        <h1 class="text-center">Иҷрокунандаҳо</h1>
+        <div class="d-flex justify-content-between mt-4 mb-3">
+            <div class="w-50">
+                <form asp-controller="User" asp-action="UsersList" method="get">
+                    <div class="d-flex ">
+                        <div class="form-group ">
+                            <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Ҷустуҷӯ" value="@Model.SearchString"/>
+                        </div>
+                        <div class="ms-2">
+                            <button type="submit" class="btn btn-primary">Ҷустуҷӯ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        @if(Model.Users.Any()){
     <table class="table">
         <thead>
         <tr>
             <th>Имя Фамилия</th>
             <th>Телефон</th>
-            <th></th>
-            <th></th>
+            <th>Тағирдиҳии рамз</th>
+            <th>Тағирдиҳии иҷрокунанда</th>
         </tr>
         </thead>
         <tbody>
@@ -29,10 +37,10 @@
                 <td>@user.UserName</td>
                 <td>@user.PhoneNumber</td>
                 <td>
-                    <a class="btn btn-info" href="~/User/ChangePassword?id=@user.Id">Изменить пароль</a>
+                    <a class="btn btn-info" href="~/User/ChangePassword?id=@user.Id">Тағирдиҳии иҷрокунанда</a>
                 </td>
                 <td>
-                    <a class="btn btn-outline-success" href="~/User/Edit?id=@user.Id">Изменить пользователя</a>
+                    <a class="btn btn-outline-success" href="~/User/Edit?id=@user.Id">Тағирдиҳии иҷрокунанда</a>
                 </td>
             </tr>
         }
@@ -43,7 +51,7 @@
             @if (Model.PagingInfo.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
+                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Ба ақиб</a>
                 </li>
             }
 
@@ -57,7 +65,7 @@
             @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
+                    <a class="page-link" href="@Url.Action("UsersList", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба пеш</a>
                 </li>
             }
         </ul>
@@ -67,3 +75,5 @@ else
 {
     <p>No documrnts found.</p>
 }
+    </div>
+</div>

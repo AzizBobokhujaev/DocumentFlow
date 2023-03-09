@@ -1,11 +1,9 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Api.Models.ViewModels.OrdersListViewModel
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center" style="background-color: #F0F0F0 ">
     <div style="width: 95%">
-    <h1 class="text-center">Orders</h1>
-
-
-    <div class="d-flex justify-content-between mt-4 mb-3">
+        <h1 class="text-center">Ҳуҷҷатҳо</h1>
+        <div class="d-flex justify-content-between mt-4 mb-3">
         <div class="w-50">
             <form asp-controller="Order" asp-action="Index" method="get">
                 <div class="d-flex ">
@@ -19,7 +17,7 @@
             </form>
         </div>
         <div class="w-25 d-flex justify-content-end">
-            <button type="button" class="btn btn-success"> <a asp-action="Create" class="text-decoration-none text-white">Create New</a></button>
+            <button type="button" class="btn btn-success"> <a asp-action="Create" class="text-decoration-none text-white">Воридотӣ нав</a></button>
         </div>
     </div>
 
@@ -28,16 +26,16 @@
         <table class="table ">
             <thead>
             <tr class="border border-dark-subtle text-center bg-danger bg-opacity-50">
-                <th class="border border-dark-subtle text-center" style="width: 8%">Document Number</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Title</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Decree File</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Execution File</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Created At</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Status</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Deadline</th>
-                <th class="border border-dark-subtle  text-center" style="width: 28%">Users</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Edit</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Delete</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">№</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Мавзуъ</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Фармон</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Ҷавоб</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Таърих</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Иҷроиш</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлат</th>
+                <th class="border border-dark-subtle  text-center" style="width: 28%">Иҷрокунанда</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Тағирдиҳӣ</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Несткунӣ</th>
 
             </tr>
             </thead>
@@ -60,7 +58,7 @@
                         }
                         else
                         {
-                            <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Добавить ответ</a>
+                            <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Ҷавоб</a>
                         }
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.CreatedAt</td>
@@ -80,10 +78,10 @@
                         }
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">
-                        <a class="btn btn-info" href="~/Order/Edit?id=@order.Id">Изменить</a>
+                        <a class="btn btn-info" href="~/Order/Edit?id=@order.Id">Тағирдиҳӣ</a>
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">
-                        <a class="btn btn-danger" href="~/Order/Delete?id=@order.Id">Удалить</a>
+                        <a class="btn btn-danger" href="~/Order/Delete?id=@order.Id">Несткунӣ</a>
                     </td>
                 </tr>
             }
@@ -94,7 +92,7 @@
                 @if (Model.PagingInfo.CurrentPage > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Ба ақиб</a>
                     </li>
                 }
 
@@ -108,7 +106,7 @@
                 @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
+                        <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба неш</a>
                     </li>
                 }
             </ul>
@@ -116,7 +114,7 @@
     }
     else
     {
-        <p>No documrnts found.</p>
+        <p>Ҳуҷҷат вуҷуд нест</p>
     }
     </div>
 </div>

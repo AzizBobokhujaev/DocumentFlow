@@ -1,54 +1,60 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Api.Models.ViewModels.OrdersListViewModel
 
-<h1>my in progress Orders</h1>
-
-<form asp-controller="Order" asp-action="GetInProgressOrders" method="get">
-    <div class="form-group">
-        <label for="searchString">Search:</label>
-        <input type="text" class="form-control" id="searchString" name="searchString" value="@Model.SearchString" />
-    </div>
-    <br/>
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+<div class="d-flex justify-content-center">
+    <div style="width: 95%">
+    <h1 class="text-center">Дар ҳолати иҷроиш</h1>
+        <div class="d-flex justify-content-between mt-4 mb-3">
+        <div class="w-50">
+            <form asp-controller="Order" asp-action="GetMyInProgressOrders" method="get">
+                <div class="d-flex ">
+                    <div class="form-group ">
+                        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Ҷустуҷӯ" value="@Model.SearchString"/>
+                    </div>
+                    <div class="ms-2">
+                        <button type="submit" class="btn btn-primary">Ҷустуҷӯ</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
 
 @if(Model.Orders.Any()){
     <table class="table">
         <thead>
-        <tr>
-            <th>Document Number</th>
-            <th>Title</th>
-            <th>Decree File</th>
-            <th>Execution File</th>
-            <th>Created At</th>
-            <th>Status</th>
-            <th>Deadline</th>
-            <th>Users</th>
-            <th></th>
-        </tr>
+          <tr class="border border-dark-subtle text-center bg-danger bg-opacity-50">
+                              <th class="border border-dark-subtle text-center" style="width: 10%">№</th>
+                              <th class="border border-dark-subtle text-center" style="width: 10%">Мавзуъ</th>
+                              <th class="border border-dark-subtle text-center" style="width: 10%">Фармон</th>
+                              <th class="border border-dark-subtle text-center" style="width: 10%">Ҷавоб</th>
+                              <th class="border border-dark-subtle text-center" style="width: 10%">Таърих</th>
+                              <th class="border border-dark-subtle text-center" style="width: 10%">Иҷроиш</th>
+                              <th class="border border-dark-subtle text-center" style="width: 10%">Муҳлат</th>
+                              <th class="border border-dark-subtle  text-center" style="width: 30%">Иҷрокунанда</th>
+          </tr>
         </thead>
         <tbody>
         @foreach (var order in Model.Orders)
         {
             <tr>
-                <td>@order.DocumentNumber</td>
-                <td>@order.Title</td>
-                <td>
+                <td class="border border-dark-subtle" style="width: 10%">@order.DocumentNumber</td>
+                <td class="border border-dark-subtle" style="width: 10%"> @order.Title</td>
+                <td class="border border-dark-subtle" style="width: 10%">
                     @if (!string.IsNullOrEmpty(order.DecreeFilePath))
                     {
                         <a href="@Url.Content("/files/"+order.DocumentNumber+"-"+order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss")+".pdf")" target="_blank">@order.DocumentNumber</a>
                     }
                 </td>
-                <td>
+                <td class="border border-dark-subtle" style="width: 10%">
                     @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
                     {
                         <a href="@Url.Content($"/response-files/{order.DocumentNumber}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.DocumentNumber</a>
                     }
                 </td>
-                <td>@order.CreatedAt</td>
-                <td>@order.Status.Name</td>
-                <td>@order.Deadline.ToString("dd/MM/yyyy")</td>
-                <td>
+                <td class="border border-dark-subtle" style="width: 10%">@order.CreatedAt</td>
+                <td class="border border-dark-subtle" style="width: 10%">@order.Status.Name</td>
+                <td class="border border-dark-subtle" style="width: 10%">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                <td class="border border-dark-subtle" style="width: 30%">
                     @foreach (var user in order.Users)
                     {
                         <span>@user.UserName</span>
@@ -63,21 +69,21 @@
             @if (Model.PagingInfo.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("GetInProgressOrders", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Previous</a>
+                    <a class="page-link" href="@Url.Action("GetMyInProgressOrders", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Ба ақиб</a>
                 </li>
             }
 
             @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
             {
                 <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("GetInProgressOrders", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
+                    <a class="page-link" href="@Url.Action("GetMyInProgressOrders", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
                 </li>
             }
 
             @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
             {
                 <li class="page-item">
-                    <a class="page-link" href="@Url.Action("GetInProgressOrders", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Next</a>
+                    <a class="page-link" href="@Url.Action("GetMyInProgressOrders", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба пеш</a>
                 </li>
             }
         </ul>
@@ -85,5 +91,7 @@
 }
 else
 {
-    <p>No documrnts found.</p>
+    <p>Ҳуҷҷат вуҷуд нест</p>
 }
+    </div>
+</div>

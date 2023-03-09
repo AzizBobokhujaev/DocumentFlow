@@ -30,16 +30,16 @@
                     {
                         if (User.IsInRole("User"))
                         {
-                            <li><h4 style="margin-top: .5rem !important; margin-right: 10px;">Привет <span style="color: rgb(94,187,241);">@User.Identity.Name</span>!</h4></li>
+                            <li><h4 style="margin-top: .5rem !important; margin-right: 10px;">Салом <span style="color: rgb(94,187,241);">@User.Identity.Name</span>!</h4></li>
                         }
                         <li class="nav-item" style="margin-top: .4rem !important;">
-                            <a class="btn btn-warning" asp-action="Logout" asp-controller="User">Выйти</a>
+                            <a class="btn btn-warning" asp-action="Logout" asp-controller="User">Баромад</a>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item" style="margin-left:740px">
-                            <a class="btn btn-warning" asp-action="Login" asp-controller="User">Войти</a>
+                            <a class="btn btn-warning" asp-action="Login" asp-controller="User">Даромад</a>
                         </li>
                     }
                 </ul>
@@ -53,13 +53,13 @@
             <div class=" d-flex ">
                 <div style="width: 20%; background-color: #C1E3F5; height: 440px; border-radius: 8px; border: 1px solid rgb(94,187,241);">
                     <ul >
-                        <li  style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/Index" style="text-decoration: none; color: black;">Index</a></li>
-                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetInprogressorders"  style="text-decoration: none; color: black;">GetInProgress</a></li>
-                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetDoneOrders"  style="text-decoration: none; color: black;">GetDone</a></li>
-                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetNotDoneOrders"  style="text-decoration: none; color: black;">GetNotDone</a></li>
-                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../User/UsersList"  style="text-decoration: none; color: black;">Users</a></li>
-                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../User/Register"  style="text-decoration: none; color: black;">Register</a></li>
-                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/Create"  style="text-decoration: none; color: black;">Create</a></li>
+                        <li  style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/Index" style="text-decoration: none; color: black;">Ҳуҷҷатҳо</a></li> <hr>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetInprogressorders"  style="text-decoration: none; color: black;">Дар ҳолати иҷроиш</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetDoneOrders"  style="text-decoration: none; color: black;">Иҷро шуд</a></li>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetNotDoneOrders"  style="text-decoration: none; color: black;">Иҷро нашуд</a></li> <hr>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../User/Register"  style="text-decoration: none; color: black;">Бақадгирӣ</a></li> <hr>
+                            <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/Create"  style="text-decoration: none; color: black;">Воридотӣ нав</a></li> <hr>
+                        <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../User/UsersList"  style="text-decoration: none; color: black;">Иҷрокунандаҳо</a></li> <hr>
                     </ul>
                 </div>
                 <div style="width:80%; border-radius: 8px; border: 1px solid rgb(94,187,241);">
@@ -78,9 +78,9 @@
                         <div class=" d-flex ">
                            <div style="width: 20%; background-color: #C1E3F5; height: 440px; border-radius: 8px; border: 1px solid rgb(94,187,241);">
                                <ul>
-                                    <li  style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyInprogressorders" style="text-decoration: none; color: black;">GetMyInprogressorders</a></li>
-                                                           <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyDoneOrders"  style="text-decoration: none; color: black;">GetMyDoneOrders</a></li>
-                                                           <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyNotDoneOrders"  style="text-decoration: none; color: black;">GetMyNotDoneOrders</a></li>
+                                    <li  style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyInprogressorders" style="text-decoration: none; color: black;">Дар ҳолати иҷроиш</a></li>
+                                                           <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyDoneOrders"  style="text-decoration: none; color: black;">Иҷро шуд</a></li>
+                                                           <li style="list-style-type: none; margin-top: 10px;"><a class="my-element"  href="../Order/GetMyNotDoneOrders"  style="text-decoration: none; color: black;">Иҷро нашуд</a></li>
                                    
                                </ul>
                             </div>

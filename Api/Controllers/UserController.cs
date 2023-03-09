@@ -40,7 +40,7 @@ public class UserController : Controller
             return View(model);
         }
 
-        return RedirectToAction("Index", "Order");
+        return RedirectToAction("Index", "Home");
     }
     
     // ------------------------------------------------Register---------------------------------------------------------
