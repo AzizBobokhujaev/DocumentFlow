@@ -35,6 +35,7 @@
                 <th class="border border-dark-subtle text-center" style="width: 8%">Таърих</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Иҷроиш</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлат</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлати тамдиди хуччат</th>
                 <th class="border border-dark-subtle  text-center" style="width: 28%">Иҷрокунанда</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Тағирдиҳӣ</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Несткунӣ</th>
@@ -67,7 +68,7 @@
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.CreatedAt</td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
-                    @if (DateTime.Now >= order.Deadline)
+                    @if ((DateTime.Now + TimeSpan.FromDays(2) >= order.Deadline && order.ExtraDeadline == null) || order.StatusId is 2 or not 1)
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: red">@order.Deadline.ToString("dd/MM/yyyy")</td>
                     }
@@ -75,6 +76,15 @@
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: lawngreen">@order.Deadline.ToString("dd/MM/yyyy")</td>
                     }
+                    @if (DateTime.Now + TimeSpan.FromDays(2) >= order.ExtraDeadline || order.StatusId is 2 or not 1)
+                    {
+                        <td class="border border-dark-subtle" style="width: 8%; color: red">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
+                    }
+                    else
+                    {
+                        <td class="border border-dark-subtle" style="width: 8%; color: lawngreen">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
+                    }
+                    
                     <td class="border border-dark-subtle" style="width: 28%">
                         @foreach (var user in order.Users)
                         {

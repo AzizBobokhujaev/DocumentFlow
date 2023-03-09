@@ -15,5 +15,6 @@ public class Order
     public int StatusId { get; set; }
     public virtual Status Status { get; set; } = null!;
     public DateTime Deadline { get; set; }
+    public DateTime? ExtraDeadline { get; set; }
     public virtual ICollection<User> Users { get; set; } = null!;
 }

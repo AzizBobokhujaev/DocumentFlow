@@ -336,6 +336,12 @@ public class OrderController : Controller
                 order.StatusId = DoneStatusId;
             }
 
+            if (model.ExtraDeadline is not null)
+            {
+                order.ExtraDeadline = model.ExtraDeadline;
+                order.StatusId = InProgressStatusId;
+            }
+
             order.Users.Clear();
 
             foreach (var userId in model.UserIds)
