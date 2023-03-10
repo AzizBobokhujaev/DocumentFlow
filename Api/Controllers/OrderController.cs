@@ -1,5 +1,6 @@
 using Api.DbContext;
 using Api.FileRootService;
+using Api.Helpers;
 using Api.Models;
 using Api.Models.Entities;
 using Api.Models.ViewModels;
@@ -43,10 +44,12 @@ public class OrderController : Controller
         {
             var status = _context.Statuses.FirstOrDefault(status1 => status1.Id == InProgressStatusId);
             var fileName = string.Concat($"{model.DecreeName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
-            var filePath = await _fileService.AddFileAsync(fileName, "files",
+            var realFileName = TextHelper.ReplaceInvalidPathChars(fileName);
+            var filePath = await _fileService.AddFileAsync(realFileName, "files",
                 model.DecreeFile);
             var order = new Order
             {
+                DocumentRealName = realFileName,
                 DecreeName = model.DecreeName,
                 ImportDate = model.ImportDate,
                 DocumentNumber = model.DocumentNumber,
@@ -94,8 +97,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            books = books.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                     b.Title.ToUpper().Contains(text) ||
+            books = books.Where(b => b.DecreeName.ToUpper().Contains(text) ||
+                                     b.ExecutionDocumentName!.ToUpper().Contains(text) ||
                                      b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -248,11 +251,13 @@ public class OrderController : Controller
     {
         if (!ModelState.IsValid) return RedirectToAction("Index");
         var order = await _context.Orders.FindAsync(model.Id);
-        var fileName = string.Concat($"{order!.ExecutionDocumentName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
-        var filePath = await _fileService.AddFileAsync(fileName, "response-files",
+        var fileName = string.Concat($"{model.ExecutionDocumentName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+        var realFileName = TextHelper.ReplaceInvalidPathChars(fileName);
+        var filePath = await _fileService.AddFileAsync(realFileName, "response-files",
             model.ExecutionFile);
 
-        order.ExecutionFilePath = filePath;
+        order!.ExecutionFilePath = filePath;
+        order.ExecutionRealDocumentName = realFileName;
         order.ExecutionDocumentName = model.ExecutionDocumentName;
         order.ExecutionFileCreatedAt = DateTime.Now;
         order.StatusId = 1;
@@ -328,9 +333,11 @@ public class OrderController : Controller
             if (model.ResponseFile != null && order.ExecutionFilePath is null)
             {
                 var fileName = string.Concat($"{order.ExecutionDocumentName}-response-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
-                var filePath = await _fileService.AddFileAsync(fileName, "response-files",
+                var realFileName = TextHelper.ReplaceInvalidPathChars(fileName);
+                var filePath = await _fileService.AddFileAsync(realFileName, "response-files",
                     model.ResponseFile);
                 order.ExecutionFilePath = filePath;
+                order.ExecutionRealDocumentName = realFileName;
                 order.ExecutionDocumentName = model.ExecutionDocumentName;
                 order.ExecutionFileCreatedAt = DateTime.Now;
                 order.StatusId = DoneStatusId;

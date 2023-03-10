@@ -1,3 +1,5 @@
+using Api.Helpers;
+
 namespace Api.FileRootService;
 
 public class FileService : IFileService
