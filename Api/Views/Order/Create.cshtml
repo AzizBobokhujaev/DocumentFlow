@@ -1,5 +1,5 @@
 @model Api.Models.ViewModels.CreateOrderVm
-<div class="row d-flex justify-content-center">
+<div class="row d-flex justify-content-center mt-5">
     <div class="col-md-8 w-50" >
         <div class="card p-3" style="border:1px solid white; border-radius:5px; background-color: #C1E3F5">
             <h1 class="text-center">Воридотӣ нав</h1>
@@ -10,37 +10,34 @@
                     <input asp-for="DocumentNumber" class="form-control" />
                     <span asp-validation-for="DocumentNumber" class="text-danger"></span>
                 </div>
-                <div class="form-group mt-3">
-                    <label asp-for="ImportDate"></label>
-                    <input asp-for="ImportDate" class="form-control" />
-                    <span asp-validation-for="ImportDate" class="text-danger"></span>
-                </div>
-                <div class="form-group mt-3">
-                    <label asp-for="DecreeName"></label>
-                    <input asp-for="DecreeName" class="form-control" />
-                    <span asp-validation-for="DecreeName" class="text-danger"></span>
-                </div>
-                <div class="form-group mt-3">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-                   <div class="form-group mt-3">
-                       <label asp-for="DecreeFile"></label>
-                       <input asp-for="DecreeFile" class="form-control" />
-                       <span asp-validation-for="DecreeFile" class="text-danger"></span>
+            <div class="form-group mt-3">
+                <label asp-for="ImportDate"></label>
+                <input asp-for="ImportDate" class="form-control" />
+                <span asp-validation-for="ImportDate" class="text-danger"></span>
+            </div>
+              <div class="d-flex w-100">
+                  <div class="form-group mt-3 w-50">
+                                    <label asp-for="DecreeName"></label>
+                                    <input asp-for="DecreeName" class="form-control" />
+                                    <span asp-validation-for="DecreeName" class="text-danger"></span>
+                                </div>
+                             
+              <div class="form-group mt-3 w-50">
+                  <label asp-for="DecreeFile"></label>
+                  <input asp-for="DecreeFile" class="form-control" />
+                  <span asp-validation-for="DecreeFile" class="text-danger"></span>
+              </div>
                    </div>
-               
-                <div class="form-group mt-3">
-                    <label asp-for="Deadline"></label>
-                    <input type="date" asp-for="Deadline" class="form-control" />
-                    <span asp-validation-for="Deadline" class="text-danger"></span>
-                </div>
-    
-    
+                             
+                 <div class="form-group mt-3">
+                                    <label asp-for="Title"></label>
+                                    <input asp-for="Title" class="form-control" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
                 <div class="dropdown mt-3">
                     <label asp-for="Users"></label>
-                    <button style="background-color: white; color: black; width: 100%" class="btn btn-secondary  dropdown-toggle text-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button style="background-color: white; color: black; width: 100%" class="btn btn-secondary  dropdown-toggle text-sm-start" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -71,12 +68,19 @@
                                 }
                     
                                 const selectedUserNames = selectedUsers.map((user) => user.name).join(', ');
-                                dropdownBtn.innerText = selectedUserNames || 'Select users';
+                                dropdownBtn.innerText = selectedUserNames || 'Ба кӣ фиристода шудааст';
                             });
                         });
                     </script>
 
                 </div>
+                
+                       <div class="form-group mt-3">
+                                    <label asp-for="Deadline"></label>
+                                    <input type="date" asp-for="Deadline" class="form-control" />
+                                    <span asp-validation-for="Deadline" class="text-danger"></span>
+                                </div>
+                    
                 <div class="text-end">
                 <button type="submit" class="btn btn-primary mt-3" style="padding:6px 20px">Сабт</button>
                 </div>
