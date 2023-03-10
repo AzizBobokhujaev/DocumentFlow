@@ -8,8 +8,10 @@ public class Order
     public string ImportDate { get; set; } = null!;
     public string Title { get; set; } = null!;
     public string DecreeFilePath { get; set; } = null!;
+    public string DocumentRealName { get; set; } = null!;
     public string? ExecutionFilePath { get; set; } 
     public string? ExecutionDocumentName { get; set; }
+    public string? ExecutionRealDocumentName { get; set; }
     public DateTime? ExecutionFileCreatedAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public int StatusId { get; set; }

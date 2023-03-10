@@ -53,13 +53,13 @@
                     <td class="border border-dark-subtle" style="width: 8%">
                         @if (!string.IsNullOrEmpty(order.DecreeFilePath))
                         {
-                            <a class="text-decoration-none" href="@Url.Content("/files/" + order.DecreeName + "-" + order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss") + ".pdf")" target="_blank">@order.DecreeName</a>
+                            <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentRealName + ".pdf")" target="_blank">@order.DecreeName</a>
                         }
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">
                         @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
                         {
-                            <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ExecutionDocumentName}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.ExecutionDocumentName</a>
+                            <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ExecutionRealDocumentName}"+".pdf")" target="_blank">@order.ExecutionDocumentName</a>
                         }
                         else
                         {
@@ -68,21 +68,23 @@
                     </td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.CreatedAt</td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
-                    @if ((DateTime.Now + TimeSpan.FromDays(2) >= order.Deadline && order.ExtraDeadline == null) || order.StatusId is 2 or not 1)
+                    @if (DateTime.Now >= order.Deadline - TimeSpan.FromDays(2) && 
+                         (order.ExtraDeadline == null || order.StatusId is 2 or not 1)
+                        )
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: red">@order.Deadline.ToString("dd/MM/yyyy")</td>
                     }
                     else
                     {
-                        <td class="border border-dark-subtle" style="width: 8%; color: lawngreen">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                        <td class="border border-dark-subtle" style="width: 8%; color: black">@order.Deadline.ToString("dd/MM/yyyy")</td>
                     }
-                    @if (DateTime.Now + TimeSpan.FromDays(2) >= order.ExtraDeadline || order.StatusId is 2 or not 1)
+                    @if (DateTime.Now >= order.ExtraDeadline - TimeSpan.FromDays(2) || order.StatusId is 2 or not 1)
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: red">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
                     }
                     else
                     {
-                        <td class="border border-dark-subtle" style="width: 8%; color: lawngreen">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
+                        <td class="border border-dark-subtle" style="width: 8%; color: black">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
                     }
                     
                     <td class="border border-dark-subtle" style="width: 28%">
