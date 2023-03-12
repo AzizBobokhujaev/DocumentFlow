@@ -24,7 +24,6 @@ public class Order
     public string? ResponseRealDocumentName { get; set; }
     public string? ResponseFilePath { get; set; }
     public DateTime? ResponseFileCreatedAt { get; set; }
-
     // Иҷроиш (статус)
     public int StatusId { get; set; }
     public virtual Status Status { get; set; } = null!;
