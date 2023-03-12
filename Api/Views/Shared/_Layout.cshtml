@@ -11,7 +11,7 @@
 <body>
 
 <div class="" style="background-color:white">
-        @if (User.IsInRole("Admin"))
+        @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
         {
             <div >
                 <div class="d-flex  justify-content-center" style="width: 100%; background-color: #C1E3F5;  border-radius: 8px; border: 1px solid rgb(94,187,241);">
@@ -30,9 +30,14 @@
                                 <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/GetInprogressorders" style="text-decoration: none; color: black;">Дар ҳолати иҷроиш</a></li>
                                 <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/GetDoneOrders" style="text-decoration: none; color: black;">Иҷро шуд</a></li>
                                 <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/GetNotDoneOrders" style="text-decoration: none; color: black;">Иҷро нашуд</a></li>
-                                <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../User/Register" style="text-decoration: none; color: black;">Бақадгирӣ</a></li>
                                 <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../Order/Create" style="text-decoration: none; color: black;">Воридотӣ нав</a></li>
-                                <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../User/UsersList" style="text-decoration: none; color: black;">Иҷрокунандаҳо</a></li>
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <li style="list-style-type: none; margin-top: 10px;">
+                                        <a class="my-element" href="../User/Register" style="text-decoration: none; color: black;">Бақадгирӣ</a>
+                                    </li>
+                                    <li style="list-style-type: none; margin-top: 10px;"><a class="my-element" href="../User/UsersList" style="text-decoration: none; color: black;">Иҷрокунандаҳо</a></li>
+                                }
                             </ul>
                         </div>
                         <div>

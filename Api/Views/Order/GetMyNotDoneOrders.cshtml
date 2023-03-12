@@ -1,7 +1,9 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Api.Models.ViewModels.OrdersListViewModel
 
- <div class="d-flex justify-content-center">
+@if (User.Identity!.IsAuthenticated)
+{
+    <div class="d-flex justify-content-center">
         <div style="width: 95%">
             <h1 class="text-center">Иҷро нашуд</h1>
 
@@ -23,102 +25,103 @@
             </div>
 
 
-@if(Model.Orders.Any()){
-    <table class="table">
-        <thead>
-        <tr class="border border-dark-subtle text-center bg-danger bg-opacity-50">
-            <th class="border border-dark-subtle text-center" style="width: 8%">Р/т</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">Санаи воридшавии ҳуҷҷат</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">№ ва шохиси ҳуҷҷатҳои воридшуда</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">Ирсолкунанда</th>
-            <th class="border border-dark-subtle text-center" style="width: 36%">Амри хаттӣ ё ба ки фиристода шудани ҳуҷҷат</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлати иҷрои ҳуҷҷат</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">Тамдиди ҳуҷҷат</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">Ҷавоби ҳуҷҷат</th>
-            <th class="border border-dark-subtle text-center" style="width: 8%">Иҷроиш</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var order in Model.Orders)
-        {
-            <tr>
-                <td class="border border-dark-subtle" style="width: 8%">@order.Rt</td>
-                <td class="border border-dark-subtle" style="width: 8%">@order.ImportDate</td>
-                <td class="border border-dark-subtle" style="width: 8%">
-                    @if (!string.IsNullOrEmpty(order.DocumentFilePath))
+            @if(Model.Orders.Any()){
+                <table class="table">
+                    <thead>
+                    <tr class="border border-dark-subtle text-center bg-danger bg-opacity-50">
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Р/т</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Санаи воридшавии ҳуҷҷат</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">№ ва шохиси ҳуҷҷатҳои воридшуда</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Ирсолкунанда</th>
+                        <th class="border border-dark-subtle text-center" style="width: 36%">Амри хаттӣ ё ба ки фиристода шудани ҳуҷҷат</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлати иҷрои ҳуҷҷат</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Тамдиди ҳуҷҷат</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Ҷавоби ҳуҷҷат</th>
+                        <th class="border border-dark-subtle text-center" style="width: 8%">Иҷроиш</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var order in Model.Orders)
                     {
-                        <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentRealName + ".pdf")" target="_blank">@order.DocumentName</a>
+                        <tr>
+                            <td class="border border-dark-subtle" style="width: 8%">@order.Rt</td>
+                            <td class="border border-dark-subtle" style="width: 8%">@order.ImportDate</td>
+                            <td class="border border-dark-subtle" style="width: 8%">
+                                @if (!string.IsNullOrEmpty(order.DocumentFilePath))
+                                {
+                                    <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentRealName + ".pdf")" target="_blank">@order.DocumentName</a>
+                                }
+                            </td>
+                            <td class="border border-dark-subtle" style="width: 8%">@order.Sender</td>
+                            <td class="border border-dark-subtle" style="width: 36%">
+                                @foreach (var user in order.Users)
+                                {
+                                    <span>@user.UserName,</span>
+                                }
+                            </td>
+                            @if (DateTime.Now + TimeSpan.FromDays(2) >= order.Deadline && 
+                                 (order.ExtraDeadline == null || order.StatusId is 2 or not 1)
+                                )
+                            {
+                                <td class="border border-dark-subtle" style="width: 8%; color: red">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                            }
+                            else
+                            {
+                                <td class="border border-dark-subtle" style="width: 8%; color: black">@order.Deadline.ToString("dd/MM/yyyy")</td>
+                            }
+                            @if (DateTime.Now + TimeSpan.FromDays(2) >= order.ExtraDeadline && order.StatusId is 2 or not 1)
+                            {
+                                <td class="border border-dark-subtle" style="width: 8%; color: red">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
+                            }
+                            else
+                            {
+                                <td class="border border-dark-subtle" style="width: 8%; color: black">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
+                            }
+                            <td class="border border-dark-subtle" style="width: 8%">
+                                @if (!string.IsNullOrEmpty(order.ResponseFilePath))
+                                {
+                                    <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ResponseRealDocumentName}"+".pdf")" target="_blank">@order.ResponseDocumentName</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Ҷавоб</a>
+                                }
+                            </td>
+                            <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
+                        </tr>
                     }
-                </td>
-                <td class="border border-dark-subtle" style="width: 8%">@order.Sender</td>
-                <td class="border border-dark-subtle" style="width: 36%">
-                    @foreach (var user in order.Users)
-                    {
-                        <span>@user.UserName,</span>
-                    }
-                </td>
-                @if (DateTime.Now + TimeSpan.FromDays(2) >= order.Deadline && 
-                     (order.ExtraDeadline == null || order.StatusId is 2 or not 1)
-                    )
-                {
-                    <td class="border border-dark-subtle" style="width: 8%; color: red">@order.Deadline.ToString("dd/MM/yyyy")</td>
-                }
-                else
-                {
-                    <td class="border border-dark-subtle" style="width: 8%; color: black">@order.Deadline.ToString("dd/MM/yyyy")</td>
-                }
-                @if (DateTime.Now + TimeSpan.FromDays(2) >= order.ExtraDeadline && order.StatusId is 2 or not 1)
-                {
-                    <td class="border border-dark-subtle" style="width: 8%; color: red">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
-                }
-                else
-                {
-                    <td class="border border-dark-subtle" style="width: 8%; color: black">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
-                }
-                <td class="border border-dark-subtle" style="width: 8%">
-                    @if (!string.IsNullOrEmpty(order.ResponseFilePath))
-                    {
-                        <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ResponseRealDocumentName}"+".pdf")" target="_blank">@order.ResponseDocumentName</a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Ҷавоб</a>
-                    }
-                </td>
-                <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-    <nav aria-label="Books navigation">
-        <ul class="pagination">
-            @if (Model.PagingInfo.CurrentPage > 1)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("GetMyNotDoneOrders", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Ба ақиб</a>
-                </li>
-            }
+                    </tbody>
+                </table>
+                <nav aria-label="Books navigation">
+                    <ul class="pagination">
+                        @if (Model.PagingInfo.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("GetMyNotDoneOrders", new { pageNumber = Model.PagingInfo.CurrentPage - 1, searchString = Model.SearchString })">Ба ақиб</a>
+                            </li>
+                        }
 
-            @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
-            {
-                <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
-                    <a class="page-link" href="@Url.Action("GetMyNotDoneOrders", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
-                </li>
-            }
+                        @for (int i = 1; i <= Model.PagingInfo.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.PagingInfo.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("GetMyNotDoneOrders", new { pageNumber = i, searchString = Model.SearchString })">@i</a>
+                            </li>
+                        }
 
-            @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
-            {
-                <li class="page-item">
-                    <a class="page-link" href="@Url.Action("GetMyNotDoneOrders", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба пеш</a>
-                </li>
+                        @if (Model.PagingInfo.CurrentPage < Model.PagingInfo.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("GetMyNotDoneOrders", new { pageNumber = Model.PagingInfo.CurrentPage + 1, searchString = Model.SearchString })">Ба пеш</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
             }
-        </ul>
-    </nav>
-}
-else
-{
-    <p>Ҳуҷҷат вуҷуд нест</p>
-}
+            else
+            {
+                <p>Ҳуҷҷат вуҷуд нест</p>
+            }
         </div>
          
- </div>
+    </div>
+}

@@ -1,7 +1,5 @@
 @model Api.Models.ViewModels.RegisterVm
-
-
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("SuperAdmin"))
 {
     <div class="row d-flex justify-content-center">
     <div class="col-md-8 w-50" >

@@ -1,8 +1,10 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Api.Models.ViewModels.UsersListViewModel
 
-
-<div class="d-flex justify-content-center">
+@{ var result = User.IsInRole("SuperAdmin");}
+@if (result)
+{
+    <div class="d-flex justify-content-center">
     <div style="width: 95%">
         <h1 class="text-center">Иҷрокунандаҳо</h1>
         <div class="d-flex justify-content-between mt-4 mb-3">
@@ -77,3 +79,4 @@ else
 }
     </div>
 </div>
+}

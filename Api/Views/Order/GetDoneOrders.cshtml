@@ -1,6 +1,8 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Api.Models.ViewModels.OrdersListViewModel
-<div class="d-flex justify-content-center" >
+@if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+{
+    <div class="d-flex justify-content-center" >
     <div style="width: 95%">
     <h1 class="text-center">Иҷро шуд</h1>
         <div class="d-flex justify-content-between mt-4 mb-3">
@@ -123,3 +125,4 @@ else
 }
     </div>
 </div>
+}
