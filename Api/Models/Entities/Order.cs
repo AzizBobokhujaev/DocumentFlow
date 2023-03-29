@@ -3,20 +3,30 @@ namespace Api.Models.Entities;
 public class Order
 {
     public int Id { get; set; }
-    public string DocumentNumber { get; set; } = null!;
-    public string DecreeName { get; set; } = null!;
+    // Р/т
+    public string Rt { get; set; } = null!;
+    // Санаи воридшавии хуччат
     public string ImportDate { get; set; } = null!;
-    public string Title { get; set; } = null!;
-    public string DecreeFilePath { get; set; } = null!;
+    // № ва шохиси хуччат
+    public string DocumentName { get; set; } = null!;
     public string DocumentRealName { get; set; } = null!;
-    public string? ExecutionFilePath { get; set; } 
-    public string? ExecutionDocumentName { get; set; }
-    public string? ExecutionRealDocumentName { get; set; }
-    public DateTime? ExecutionFileCreatedAt { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public string DocumentFilePath { get; set; } = null!;
+    // Ирсолкунанда
+    public string Sender { get; set; } = null!;
+    // Иҷрокунанда
+    public virtual ICollection<User> Users { get; set; } = null!;
+    // муҳлати иҷроиш
+    public DateTime Deadline { get; set; }
+    // тамдиди ҳуҷҷат
+    public DateTime? ExtraDeadline { get; set; }
+    // Ҷавоби ҳуҷҷат
+    public string? ResponseDocumentName { get; set; }
+    public string? ResponseRealDocumentName { get; set; }
+    public string? ResponseFilePath { get; set; }
+    public DateTime? ResponseFileCreatedAt { get; set; }
+
+    // Иҷроиш (статус)
     public int StatusId { get; set; }
     public virtual Status Status { get; set; } = null!;
-    public DateTime Deadline { get; set; }
-    public DateTime? ExtraDeadline { get; set; }
-    public virtual ICollection<User> Users { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
 }

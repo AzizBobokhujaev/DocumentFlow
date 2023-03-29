@@ -26,49 +26,39 @@
         <table class="table ">
             <thead>
             <tr class="border border-dark-subtle text-center bg-danger bg-opacity-50">
-                <th class="border border-dark-subtle text-center" style="width: 8%">№</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Санаи воридшавии хуччат</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Номи хуччат</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Мавзуъ</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Фармон</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Ҷавоб</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Таърих</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Р/т</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Санаи воридшавии ҳуҷҷат</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">№ ва шохиси ҳуҷҷатҳои воридшуда</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Ирсолкунанда</th>
+                <th class="border border-dark-subtle text-center" style="width: 20%">Амри хаттӣ ё ба ки фиристода шудани ҳуҷҷат</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлати иҷрои ҳуҷҷат</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Тамдиди ҳуҷҷат</th>
+                <th class="border border-dark-subtle text-center" style="width: 8%">Ҷавоби ҳуҷҷат</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Иҷроиш</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлат</th>
-                <th class="border border-dark-subtle text-center" style="width: 8%">Муҳлати тамдиди хуччат</th>
-                <th class="border border-dark-subtle  text-center" style="width: 28%">Иҷрокунанда</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Тағирдиҳӣ</th>
                 <th class="border border-dark-subtle text-center" style="width: 8%">Несткунӣ</th>
-
             </tr>
             </thead>
             <tbody class="">
             @foreach (var order in Model.Orders)
             {
                 <tr>
-                    <td class="border border-dark-subtle" style="width: 8%">@order.DocumentNumber</td>
+                    <td class="border border-dark-subtle" style="width: 8%">@order.Rt</td>
                     <td class="border border-dark-subtle" style="width: 8%">@order.ImportDate</td>
-                    <td class="border border-dark-subtle" style="width: 8%">@order.DecreeName</td>
-                    <td class="border border-dark-subtle" style="width: 8%">@order.Title</td>
                     <td class="border border-dark-subtle" style="width: 8%">
-                        @if (!string.IsNullOrEmpty(order.DecreeFilePath))
+                        @if (!string.IsNullOrEmpty(order.DocumentFilePath))
                         {
-                            <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentRealName + ".pdf")" target="_blank">@order.DecreeName</a>
+                            <a class="text-decoration-none" href="@Url.Content("/files/" + order.DocumentRealName + ".pdf")" target="_blank">@order.DocumentName</a>
                         }
                     </td>
-                    <td class="border border-dark-subtle" style="width: 8%">
-                        @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
+                    <td class="border border-dark-subtle" style="width: 8%">@order.Sender</td>
+                    <td class="border border-dark-subtle" style="width: 20%">
+                        @foreach (var user in order.Users)
                         {
-                            <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ExecutionRealDocumentName}"+".pdf")" target="_blank">@order.ExecutionDocumentName</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Ҷавоб</a>
+                            <span>@user.UserName,</span>
                         }
                     </td>
-                    <td class="border border-dark-subtle" style="width: 8%">@order.CreatedAt</td>
-                    <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
-                    @if (DateTime.Now >= order.Deadline - TimeSpan.FromDays(2) && 
+                    @if (DateTime.Now + TimeSpan.FromDays(2) >= order.Deadline && 
                          (order.ExtraDeadline == null || order.StatusId is 2 or not 1)
                         )
                     {
@@ -78,7 +68,7 @@
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: black">@order.Deadline.ToString("dd/MM/yyyy")</td>
                     }
-                    @if (DateTime.Now >= order.ExtraDeadline - TimeSpan.FromDays(2) || order.StatusId is 2 or not 1)
+                    @if (DateTime.Now + TimeSpan.FromDays(2) >= order.ExtraDeadline && order.StatusId is 2 or not 1)
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: red">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
                     }
@@ -86,13 +76,17 @@
                     {
                         <td class="border border-dark-subtle" style="width: 8%; color: black">@order.ExtraDeadline?.ToString("dd/MM/yyyy")</td>
                     }
-                    
-                    <td class="border border-dark-subtle" style="width: 28%">
-                        @foreach (var user in order.Users)
+                    <td class="border border-dark-subtle" style="width: 8%">
+                        @if (!string.IsNullOrEmpty(order.ResponseFilePath))
                         {
-                            <span>@user.UserName,</span>
+                            <a class="text-decoration-none" href="@Url.Content($"/response-files/{order.ResponseRealDocumentName}"+".pdf")" target="_blank">@order.ResponseDocumentName</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-info" href="~/Order/SetExecutionFile?id=@order.Id">Ҷавоб</a>
                         }
                     </td>
+                    <td class="border border-dark-subtle" style="width: 8%">@order.Status.Name</td>
                     <td class="border border-dark-subtle" style="width: 8%">
                         <a class="btn btn-info" href="~/Order/Edit?id=@order.Id">Тағирдиҳӣ</a>
                     </td>

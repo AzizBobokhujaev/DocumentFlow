@@ -37,18 +37,18 @@
         @foreach (var order in Model.Orders)
         {
             <tr>
-                <td class="border border-dark-subtle text-center" style="width: 10%">@order.DocumentNumber</td>
-                <td class="border border-dark-subtle text-center" style="width: 10%">@order.Title</td>
+                <td class="border border-dark-subtle text-center" style="width: 10%">@order.Rt</td>
+                <td class="border border-dark-subtle text-center" style="width: 10%">@order.Sender</td>
                 <td class="border border-dark-subtle text-center" style="width: 10%">
-                    @if (!string.IsNullOrEmpty(order.DecreeFilePath))
+                    @if (!string.IsNullOrEmpty(order.DocumentFilePath))
                     {
-                        <a href="@Url.Content("/files/"+order.DecreeName+"-"+order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss")+".pdf")" target="_blank">@order.DecreeName</a>
+                        <a href="@Url.Content("/files/"+order.DocumentName+"-"+order.CreatedAt.ToString("dd/MM/yy/HH/mm/ss")+".pdf")" target="_blank">@order.DocumentName</a>
                     }
                 </td>
                 <td class="border border-dark-subtle text-center" style="width: 10%">
-                    @if (!string.IsNullOrEmpty(order.ExecutionFilePath))
+                    @if (!string.IsNullOrEmpty(order.ResponseFilePath))
                     {
-                        <a href="@Url.Content($"/response-files/{order.ExecutionDocumentName}-{order.ExecutionFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.ExecutionDocumentName</a>
+                        <a href="@Url.Content($"/response-files/{order.ResponseDocumentName}-{order.ResponseFileCreatedAt:dd/MM/yy/HH/mm/ss}.pdf")" target="_blank">@order.ResponseDocumentName</a>
                     }
                 </td>
                 <td class="border border-dark-subtle text-center" style="width: 10%">@order.CreatedAt</td>

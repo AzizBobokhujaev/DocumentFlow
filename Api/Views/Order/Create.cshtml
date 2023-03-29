@@ -6,41 +6,38 @@
 
             <form method="post" enctype="multipart/form-data">
                 <div class="form-group mt-3">
-                    <label asp-for="DocumentNumber"></label>
-                    <input asp-for="DocumentNumber" class="form-control" />
-                    <span asp-validation-for="DocumentNumber" class="text-danger"></span>
+                    <label asp-for="Rt"></label>
+                    <input asp-for="Rt" class="form-control" />
+                    <span asp-validation-for="Rt" class="text-danger"></span>
                 </div>
                 <div class="form-group mt-3">
                     <label asp-for="ImportDate"></label>
                     <input asp-for="ImportDate" class="form-control" />
                     <span asp-validation-for="ImportDate" class="text-danger"></span>
                 </div>
-                <div class="form-group mt-3">
-                    <label asp-for="DecreeName"></label>
-                    <input asp-for="DecreeName" class="form-control" />
-                    <span asp-validation-for="DecreeName" class="text-danger"></span>
+                <div class="d-flex">
+                <div class="form-group mt-3 w-50">
+                    <label asp-for="DocumentName"></label>
+                    <input asp-for="DocumentName" class="form-control" />
+                    <span asp-validation-for="DocumentName" class="text-danger"></span>
                 </div>
-                <div class="form-group mt-3">
-                    <label asp-for="Title"></label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-                   <div class="form-group mt-3">
-                       <label asp-for="DecreeFile"></label>
-                       <input asp-for="DecreeFile" class="form-control" />
-                       <span asp-validation-for="DecreeFile" class="text-danger"></span>
-                   </div>
                
-                <div class="form-group mt-3">
-                    <label asp-for="Deadline"></label>
-                    <input type="date" asp-for="Deadline" class="form-control" />
-                    <span asp-validation-for="Deadline" class="text-danger"></span>
+                <div class="form-group mt-3 w-50">
+                    <label asp-for="DocumentFile"></label>
+                    <input asp-for="DocumentFile" class="form-control" />
+                    <span asp-validation-for="DocumentFile" class="text-danger"></span>
                 </div>
-    
+                </div>
+                <div class="form-group mt-3">
+                                   <label asp-for="Sender"></label>
+                                   <input asp-for="Sender" class="form-control" />
+                                   <span asp-validation-for="Sender" class="text-danger"></span>
+                               </div>
+             
     
                 <div class="dropdown mt-3">
                     <label asp-for="Users"></label>
-                    <button style="background-color: white; color: black; width: 100%" class="btn btn-secondary  dropdown-toggle text-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button style="background-color: white; color: black; width: 100%" class="btn btn-secondary  dropdown-toggle text-sm-start" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -77,6 +74,12 @@
                     </script>
 
                 </div>
+                   <div class="form-group mt-3">
+                                    <label asp-for="Deadline"></label>
+                                    <input type="date" asp-for="Deadline" class="form-control" />
+                                    <span asp-validation-for="Deadline" class="text-danger"></span>
+                                </div>
+                    
                 <div class="text-end">
                 <button type="submit" class="btn btn-primary mt-3" style="padding:6px 20px">Сабт</button>
                 </div>

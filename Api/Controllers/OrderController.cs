@@ -43,21 +43,21 @@ public class OrderController : Controller
         if (ModelState.IsValid)
         {
             var status = _context.Statuses.FirstOrDefault(status1 => status1.Id == InProgressStatusId);
-            var fileName = string.Concat($"{model.DecreeName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
+            var fileName = string.Concat($"{model.DocumentName}-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
             var realFileName = TextHelper.ReplaceInvalidPathChars(fileName);
             var filePath = await _fileService.AddFileAsync(realFileName, "files",
-                model.DecreeFile);
+                model.DocumentFile);
             var order = new Order
             {
                 DocumentRealName = realFileName,
-                DecreeName = model.DecreeName,
+                DocumentName = model.DocumentName,
                 ImportDate = model.ImportDate,
-                DocumentNumber = model.DocumentNumber,
-                Title = model.Title,
+                Rt = model.Rt,
+                Sender = model.Sender,
                 Deadline = model.Deadline,
                 Status = status!,
                 CreatedAt = DateTime.Now,
-                DecreeFilePath = filePath,
+                DocumentFilePath = filePath,
                 Users = new List<User>()
             };
 
@@ -97,8 +97,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            books = books.Where(b => b.DecreeName.ToUpper().Contains(text) ||
-                                     b.ExecutionDocumentName!.ToUpper().Contains(text) ||
+            books = books.Where(b => b.DocumentName.ToUpper().Contains(text) ||
+                                     b.ResponseDocumentName!.ToUpper().Contains(text) ||
                                      b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -135,8 +135,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                     b.Title.ToUpper().Contains(text) ||
+            orders = orders.Where(b => b.Rt.ToUpper().Contains(text) || 
+                                     b.Sender.ToUpper().Contains(text) ||
                                      b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -173,8 +173,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                       b.Title.ToUpper().Contains(text) ||
+            orders = orders.Where(b => b.Rt.ToUpper().Contains(text) || 
+                                       b.Sender.ToUpper().Contains(text) ||
                                        b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -211,8 +211,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                       b.Title.ToUpper().Contains(text) ||
+            orders = orders.Where(b => b.Rt.ToUpper().Contains(text) || 
+                                       b.Sender.ToUpper().Contains(text) ||
                                        b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -256,10 +256,10 @@ public class OrderController : Controller
         var filePath = await _fileService.AddFileAsync(realFileName, "response-files",
             model.ExecutionFile);
 
-        order!.ExecutionFilePath = filePath;
-        order.ExecutionRealDocumentName = realFileName;
-        order.ExecutionDocumentName = model.ExecutionDocumentName;
-        order.ExecutionFileCreatedAt = DateTime.Now;
+        order!.ResponseFilePath = filePath;
+        order.ResponseRealDocumentName = realFileName;
+        order.ResponseDocumentName = model.ExecutionDocumentName;
+        order.ResponseFileCreatedAt = DateTime.Now;
         order.StatusId = 1;
         _context.Update(order);
         await _context.SaveChangesAsync();
@@ -280,11 +280,9 @@ public class OrderController : Controller
         var model = new EditOrderVm
         {
             Id = order.Id,
-            Title = order.Title,
-            Deadline = order.Deadline,
+            Sender = order.Sender,
             StatusId = order.StatusId,
-            ExecutionFilePath = order.ExecutionFilePath,
-            ExecutionDocumentName = order.ExecutionDocumentName,
+            ResponseFilePath = order.ResponseFilePath,
             Users = users.Select(u => new SelectListItem
             {
                 Text = u.UserName,
@@ -319,28 +317,10 @@ public class OrderController : Controller
 
         if (ModelState.IsValid)
         {
-            order.Title = model.Title;
+            order.Sender = model.Sender;
             if (model.StatusId != order.StatusId)
             {
                 order.StatusId = model.StatusId;
-            }
-            else if (order.StatusId == model.StatusId && (model.Deadline != order.Deadline || model.Deadline > DateTime.Now))
-            {
-                order.StatusId = InProgressStatusId;
-            }
-            order.Deadline = model.Deadline;
-
-            if (model.ResponseFile != null && order.ExecutionFilePath is null)
-            {
-                var fileName = string.Concat($"{order.ExecutionDocumentName}-response-", DateTime.Now.ToString("dd/MM/yy/HH/mm/ss"));
-                var realFileName = TextHelper.ReplaceInvalidPathChars(fileName);
-                var filePath = await _fileService.AddFileAsync(realFileName, "response-files",
-                    model.ResponseFile);
-                order.ExecutionFilePath = filePath;
-                order.ExecutionRealDocumentName = realFileName;
-                order.ExecutionDocumentName = model.ExecutionDocumentName;
-                order.ExecutionFileCreatedAt = DateTime.Now;
-                order.StatusId = DoneStatusId;
             }
 
             if (model.ExtraDeadline is not null)
@@ -419,8 +399,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                       b.Title.ToUpper().Contains(text) ||
+            orders = orders.Where(b => b.Rt.ToUpper().Contains(text) || 
+                                       b.Sender.ToUpper().Contains(text) ||
                                        b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -457,8 +437,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                       b.Title.ToUpper().Contains(text) ||
+            orders = orders.Where(b => b.Rt.ToUpper().Contains(text) || 
+                                       b.Sender.ToUpper().Contains(text) ||
                                        b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 
@@ -495,8 +475,8 @@ public class OrderController : Controller
         if (!string.IsNullOrEmpty(searchString))
         {
             var text = searchString.ToUpper();
-            orders = orders.Where(b => b.DocumentNumber.ToUpper().Contains(text) || 
-                                       b.Title.ToUpper().Contains(text) ||
+            orders = orders.Where(b => b.Rt.ToUpper().Contains(text) || 
+                                       b.Sender.ToUpper().Contains(text) ||
                                        b.Users.Any(category => category.UserName.ToUpper().Contains(text)));
         }
 

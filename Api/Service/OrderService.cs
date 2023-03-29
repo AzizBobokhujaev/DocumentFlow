@@ -15,7 +15,7 @@ public class OrderService : IOrderService
     public async Task ChangeStatusId()
     {
         var orders = await _dbContext.Orders
-            .Where(order => order.Deadline <= DateTime.Now && (order.StatusId != 2 || order.ExecutionFilePath != null))
+            .Where(order => order.Deadline <= DateTime.Now && (order.StatusId != 2 || order.ResponseFilePath != null))
             .ToListAsync();
         foreach (var order in orders)
         {

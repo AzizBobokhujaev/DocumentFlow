@@ -11,6 +11,14 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Remove="wwwroot\files\2E3-11.03.23.09.59.12.pdf" />
+      <Content Remove="wwwroot\files\2E3-11.03.23.09.59.05.pdf" />
+      <Content Remove="wwwroot\files\2E3-11.03.23.09.58.57.pdf" />
+      <Content Remove="wwwroot\response-files\ejfioeusrghoweipgo2wpeigh3reowfhegowqg_kefmerignrg-12.03.23.14.02.18.pdf" />
+      <Content Remove="wwwroot\files\№ ва шохиси ҳуҷҷатҳои воридшуда_-11.03.23.11.11.05.pdf" />
+      <Content Remove="wwwroot\files\№ ва шохиси ҳуҷҷатҳои воридшуда-11.03.23.11.05.38.pdf" />
+      <Content Remove="wwwroot\files\thyjtrytu-11.03.23.10.54.42.pdf" />
+      <Content Remove="wwwroot\files\QWTYTUYIL-11.03.23.09.58.48.pdf" />
     </ItemGroup>
 
     <ItemGroup>

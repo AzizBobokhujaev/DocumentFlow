@@ -91,14 +91,20 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DocumentNumber = table.Column<string>(type: "text", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    DecreeFilePath = table.Column<string>(type: "text", nullable: false),
-                    ExecutionFilePath = table.Column<string>(type: "text", nullable: true),
-                    ExecutionFileCreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Rt = table.Column<string>(type: "text", nullable: false),
+                    ImportDate = table.Column<string>(type: "text", nullable: false),
+                    DocumentName = table.Column<string>(type: "text", nullable: false),
+                    DocumentRealName = table.Column<string>(type: "text", nullable: false),
+                    DocumentFilePath = table.Column<string>(type: "text", nullable: false),
+                    Sender = table.Column<string>(type: "text", nullable: false),
+                    Deadline = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ExtraDeadline = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ResponseDocumentName = table.Column<string>(type: "text", nullable: true),
+                    ResponseRealDocumentName = table.Column<string>(type: "text", nullable: true),
+                    ResponseFilePath = table.Column<string>(type: "text", nullable: true),
+                    ResponseFileCreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     StatusId = table.Column<int>(type: "integer", nullable: false),
-                    Deadline = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {

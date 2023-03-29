@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Api.Migrations
 {
     [DbContext(typeof(DocumentFlowDbContext))]
-    [Migration("20230310170735_DirectoryRealName")]
-    partial class DirectoryRealName
+    [Migration("20230312094338_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,32 +38,16 @@ namespace Api.Migrations
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("DecreeFilePath")
+                    b.Property<string>("DocumentFilePath")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("DecreeName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("DocumentNumber")
+                    b.Property<string>("DocumentName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DocumentRealName")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ExecutionDocumentName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("ExecutionFileCreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ExecutionFilePath")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ExecutionRealDocumentName")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("ExtraDeadline")
@@ -73,12 +57,28 @@ namespace Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("integer");
+                    b.Property<string>("ResponseDocumentName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Title")
+                    b.Property<DateTime?>("ResponseFileCreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ResponseFilePath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResponseRealDocumentName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Rt")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("Sender")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
